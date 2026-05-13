@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feane - Build Your Pizza</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { background:#f5f5f5; opacity:0; transition:opacity 0.6s ease; padding-top:90px; }
+    body.loaded { opacity:1; }
+
+    .navbar { position:fixed; top:0; width:100%; padding:18px 60px; background:rgba(0,0,0,0.82); backdrop-filter:blur(10px); display:flex; justify-content:space-between; align-items:center; z-index:1000; }
+    .logo { font-family:'Pacifico',cursive; font-size:26px; color:white; }
+    nav a { color:white; text-decoration:none; margin:0 15px; font-size:14px; font-weight:500; transition:0.3s; }
+    nav a:hover { color:#f7b731; }
+    .nav-icons { display:flex; align-items:center; gap:15px; }
+    .nav-icons i { color:white; cursor:pointer; font-size:18px; transition:0.3s; }
+    .nav-icons i:hover { color:#f7b731; }
+    .order-btn { background:#f7b731; border:none; padding:10px 18px; border-radius:25px; cursor:pointer; font-weight:600; }
+
+    .builder { padding:60px 40px; min-height:100vh; }
+    .builder-header { text-align:center; margin-bottom:50px; }
+    .builder-header h1 { font-family:'Pacifico',cursive; font-size:50px; color:#1e272e; margin-bottom:10px; }
+    .builder-header p { color:#888; font-size:16px; }
+    .back-link { display:inline-flex; align-items:center; gap:8px; color:#f7b731; text-decoration:none; font-weight:600; font-size:14px; margin-bottom:20px; transition:0.3s; }
+    .back-link:hover { gap:14px; }
+
+    .builder-layout { display:flex; justify-content:center; align-items:flex-start; gap:70px; flex-wrap:wrap; max-width:1100px; margin:0 auto; }
+    .pizza-stage { display:flex; flex-direction:column; align-items:center; gap:22px; }
+
+    /* ======= THE PIZZA DISH ======= */
+    .pizza-dish {
+      position: relative;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      /* Outer plate ring */
+      box-shadow:
+        0 0 0 12px #e8e0d0,
+        0 0 0 20px #c8b89a,
+        0 0 0 24px #b0a080,
+        0 30px 80px rgba(0,0,0,0.35);
+      transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+      overflow: hidden;
+    }
+    .pizza-dish:hover { transform: scale(1.03) rotate(1deg); }
+
+    /* ---- PIZZA BASE (pure CSS) ---- */
+    .pizza-base {
+      position: absolute; inset: 0; border-radius: 50%;
+      /* Baked dough color with radial gradient for depth */
+      background:
+        radial-gradient(circle at 30% 30%, #e8a84a 0%, #c97b2a 45%, #a0581a 100%);
+      z-index: 1;
+    }
+    /* Crust ring */
+    .pizza-base::before {
+      content:''; position:absolute; inset:0; border-radius:50%;
+      background: radial-gradient(circle at 50% 50%, transparent 72%, #c97b2a 73%, #a85c1a 78%, #c97b2a 79%, transparent 80%);
+      z-index:2;
+    }
+    /* Tomato sauce area */
+    .pizza-base::after {
+      content:''; position:absolute;
+      top:13%; left:13%; right:13%; bottom:13%;
+      border-radius:50%;
+      background: radial-gradient(circle at 40% 35%, #d4462a 0%, #b83020 60%, #952215 100%);
+      z-index:2;
+    }
+
+    /* ======= TOPPING LAYERS ======= */
+    /* Every topping layer sits above the base */
+    .topping-layer {
+      position: absolute; inset: 0; border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .topping-layer.visible {
+      opacity: 1;
+      animation: toppingPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes toppingPop {
+      0%  { transform:scale(0.85) rotate(-5deg); opacity:0; }
+      100%{ transform:scale(1)    rotate(0deg);  opacity:1; }
+    }
+
+    /* ---- CHEESE ---- */
+    /* Melted mozzarella: irregular cream/yellow blobs */
+    #layer-cheese { background: transparent; }
+    #layer-cheese::before {
+      content:''; position:absolute; inset:13%;
+      border-radius:50%;
+      background:
+        radial-gradient(ellipse 70px 60px at 35% 38%, rgba(255,240,160,0.95) 0%, transparent 100%),
+        radial-gradient(ellipse 85px 55px at 65% 30%, rgba(255,235,140,0.92) 0%, transparent 100%),
+        radial-gradient(ellipse 65px 70px at 55% 68%, rgba(250,230,130,0.9)  0%, transparent 100%),
+        radial-gradient(ellipse 55px 50px at 25% 65%, rgba(255,238,150,0.88) 0%, transparent 100%),
+        radial-gradient(ellipse 60px 45px at 75% 65%, rgba(252,232,138,0.87) 0%, transparent 100%),
+        radial-gradient(ellipse 40px 35px at 50% 45%, rgba(255,245,170,0.85) 0%, transparent 100%);
+    }
+
+    /* ---- PEPPERONI ---- */
+    /* Deep red round slices with darker center */
+    #layer-pepperoni { background: transparent; }
+    #layer-pepperoni::before {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(circle 28px at 33% 35%, #8B1515 30%, #B02020 55%, transparent 70%),
+        radial-gradient(circle 28px at 65% 28%, #8B1515 30%, #B02020 55%, transparent 70%),
+        radial-gradient(circle 28px at 55% 62%, #8B1515 30%, #B02020 55%, transparent 70%),
+        radial-gradient(circle 24px at 25% 62%, #8B1515 30%, #B02020 55%, transparent 70%),
+        radial-gradient(circle 24px at 70% 60%, #8B1515 30%, #B02020 55%, transparent 70%),
+        radial-gradient(circle 20px at 48% 42%, #8B1515 30%, #B02020 55%, transparent 70%);
+    }
+    /* Fat white spots on pepperoni */
+    #layer-pepperoni::after {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(circle 5px at 33% 35%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(circle 5px at 65% 28%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(circle 5px at 55% 62%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(circle 4px at 25% 62%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(circle 4px at 70% 60%, rgba(255,255,255,0.6) 0%, transparent 100%);
+    }
+
+    /* ---- ONION ---- */
+    /* Translucent purple/white rings */
+    #layer-onion { background: transparent; }
+    #layer-onion::before {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(ellipse 38px 16px at 38% 38%, transparent 50%, rgba(200,150,220,0.75) 51%, rgba(200,150,220,0.75) 62%, transparent 63%),
+        radial-gradient(ellipse 32px 13px at 62% 30%, transparent 50%, rgba(220,170,240,0.7)  51%, rgba(220,170,240,0.7)  62%, transparent 63%),
+        radial-gradient(ellipse 35px 14px at 52% 64%, transparent 50%, rgba(200,150,220,0.72) 51%, rgba(200,150,220,0.72) 62%, transparent 63%),
+        radial-gradient(ellipse 28px 12px at 28% 60%, transparent 50%, rgba(210,160,230,0.7)  51%, rgba(210,160,230,0.7)  62%, transparent 63%),
+        radial-gradient(ellipse 28px 12px at 68% 58%, transparent 50%, rgba(210,160,230,0.68) 51%, rgba(210,160,230,0.68) 62%, transparent 63%);
+    }
+
+    /* ---- OLIVES ---- */
+    /* Black circles with red center hole */
+    #layer-olive { background: transparent; }
+    #layer-olive::before {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(circle 16px at 35% 36%, #1a1a1a 40%, #333 65%, transparent 75%),
+        radial-gradient(circle 16px at 62% 30%, #1a1a1a 40%, #333 65%, transparent 75%),
+        radial-gradient(circle 16px at 53% 64%, #1a1a1a 40%, #333 65%, transparent 75%),
+        radial-gradient(circle 14px at 26% 63%, #1a1a1a 40%, #333 65%, transparent 75%),
+        radial-gradient(circle 14px at 68% 62%, #1a1a1a 40%, #333 65%, transparent 75%);
+    }
+    #layer-olive::after {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(circle 6px at 35% 36%, #c0392b 100%, transparent 0%),
+        radial-gradient(circle 6px at 62% 30%, #c0392b 100%, transparent 0%),
+        radial-gradient(circle 6px at 53% 64%, #c0392b 100%, transparent 0%),
+        radial-gradient(circle 5px at 26% 63%, #c0392b 100%, transparent 0%),
+        radial-gradient(circle 5px at 68% 62%, #c0392b 100%, transparent 0%);
+    }
+
+    /* ---- MUSHROOM ---- */
+    /* Beige/brown irregular blobs */
+    #layer-mushroom { background: transparent; }
+    #layer-mushroom::before {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(ellipse 30px 22px at 36% 36%, #b8915a 0%, #8a6535 60%, transparent 80%),
+        radial-gradient(ellipse 28px 20px at 63% 30%, #b8915a 0%, #8a6535 60%, transparent 80%),
+        radial-gradient(ellipse 32px 22px at 53% 64%, #b8915a 0%, #8a6535 60%, transparent 80%),
+        radial-gradient(ellipse 24px 18px at 27% 62%, #b8915a 0%, #8a6535 60%, transparent 80%),
+        radial-gradient(ellipse 24px 18px at 68% 60%, #b8915a 0%, #8a6535 60%, transparent 80%);
+    }
+    #layer-mushroom::after {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(ellipse 12px 8px at 36% 33%, rgba(255,240,200,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 11px 7px at 63% 27%, rgba(255,240,200,0.5) 0%, transparent 100%),
+        radial-gradient(ellipse 12px 8px at 53% 61%, rgba(255,240,200,0.5) 0%, transparent 100%);
+    }
+
+    /* ---- BASIL ---- */
+    /* Green leaf shapes */
+    #layer-basil { background: transparent; }
+    #layer-basil::before {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(ellipse 30px 18px at 37% 37%, #2d7a30 0%, #1a5c1d 70%, transparent 85%),
+        radial-gradient(ellipse 26px 16px at 63% 29%, #35892d 0%, #1e6020 70%, transparent 85%),
+        radial-gradient(ellipse 28px 17px at 53% 64%, #2d7a30 0%, #1a5c1d 70%, transparent 85%),
+        radial-gradient(ellipse 22px 14px at 27% 63%, #35892d 0%, #1e6020 70%, transparent 85%),
+        radial-gradient(ellipse 22px 14px at 68% 61%, #2d7a30 0%, #1a5c1d 70%, transparent 85%);
+    }
+    /* Leaf veins */
+    #layer-basil::after {
+      content:''; position:absolute; inset:13%; border-radius:50%;
+      background:
+        radial-gradient(ellipse 3px 14px at 37% 37%, rgba(255,255,255,0.25) 0%, transparent 100%),
+        radial-gradient(ellipse 3px 12px at 63% 29%, rgba(255,255,255,0.25) 0%, transparent 100%),
+        radial-gradient(ellipse 3px 13px at 53% 64%, rgba(255,255,255,0.25) 0%, transparent 100%);
+    }
+
+    /* Price badge */
+    .price-badge { background:#1e272e; color:#f7b731; padding:13px 32px; border-radius:25px; font-size:21px; font-weight:700; display:flex; align-items:center; gap:10px; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+
+    /* ======= PANEL ======= */
+    .panel { background:#1e272e; border-radius:24px; padding:35px 30px; color:white; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
+    .panel h3 { font-family:'Pacifico',cursive; font-size:26px; color:#f7b731; margin-bottom:25px; }
+
+    .toppings-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:25px; }
+
+    .topping-btn {
+      background:rgba(255,255,255,0.07); border:2px solid transparent; border-radius:16px;
+      padding:16px 8px; cursor:pointer; color:white;
+      display:flex; flex-direction:column; align-items:center; gap:7px;
+      transition:all 0.3s ease; position:relative;
+    }
+    .topping-btn:hover { background:rgba(247,183,49,0.15); border-color:#f7b731; transform:translateY(-4px); }
+    .topping-btn.active { background:rgba(247,183,49,0.22); border-color:#f7b731; }
+    .topping-btn .check { position:absolute; top:8px; right:8px; width:18px; height:18px; background:#f7b731; border-radius:50%; display:none; align-items:center; justify-content:center; font-size:10px; color:#1e272e; }
+    .topping-btn.active .check { display:flex; }
+    .topping-btn .t-icon { font-size:36px; line-height:1; transition:transform 0.3s; }
+    .topping-btn:hover .t-icon { transform:scale(1.2) rotate(8deg); }
+    .topping-name { font-size:13px; font-weight:500; }
+    .topping-price { font-size:11px; color:#f7b731; }
+
+    .counter-row { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.07); border-radius:12px; padding:12px 16px; margin-bottom:20px; }
+    .counter-row span { font-size:14px; opacity:0.8; }
+    .counter-badge { background:#f7b731; color:#1e272e; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+
+    .controls { display:flex; gap:10px; }
+    .reset-btn { flex:1; background:transparent; border:2px solid #f7b731; color:#f7b731; padding:13px; border-radius:25px; font-weight:600; cursor:pointer; transition:all 0.3s; font-size:13px; }
+    .reset-btn:hover { background:#f7b731; color:#1e272e; }
+    .cart-add-btn { flex:2; background:#f7b731; border:none; color:#1e272e; padding:13px; border-radius:25px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .cart-add-btn:hover { background:#ffcc4d; }
+
+    /* Popup */
+    .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:2000; }
+    .popup-box { width:420px; background:#1e272e; color:white; padding:30px; border-radius:20px; animation:pop 0.35s ease; }
+    @keyframes pop{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+    .popup-box h2 { font-family:'Pacifico',cursive; margin-bottom:20px; color:#f7b731; }
+    .popup-box input { width:100%; margin:8px 0; padding:12px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white; font-size:14px; }
+    .popup-box input::placeholder { color:rgba(255,255,255,0.5); }
+    .cart-items { max-height:160px; overflow-y:auto; margin-bottom:15px; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:10px; margin-bottom:8px; font-size:14px; }
+    .cart-item button { background:#e74c3c; border:none; color:white; padding:4px 10px; border-radius:8px; cursor:pointer; }
+    .total-text { font-size:18px; font-weight:600; margin:10px 0; }
+    .checkout-btn { width:100%; background:#f7b731; border:none; padding:14px; border-radius:25px; font-weight:700; cursor:pointer; margin-top:10px; font-size:15px; }
+    .close-btn { width:100%; background:transparent; border:2px solid #f7b731; padding:12px; border-radius:25px; color:#f7b731; cursor:pointer; margin-top:10px; font-weight:600; }
+
+    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e272e; color:#f7b731; padding:14px 28px; border-radius:25px; font-weight:600; font-size:15px; box-shadow:0 10px 30px rgba(0,0,0,0.4); border:1px solid rgba(247,183,49,0.3); transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); z-index:9999; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+
+    @media(max-width:768px){ .navbar{padding:18px 20px;} .pizza-dish{width:300px;height:300px;} .panel{width:290px;} }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Feane</div>
+    <nav>
+      <a href="home.html">HOME</a>
+      <a href="menu.html">MENU</a>
+      <a href="about.html">ABOUT</a>
+    </nav>
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <div class="builder">
+    <div style="text-align:center">
+      <a href="food-select.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Food Selection</a>
+    </div>
+    <div class="builder-header">
+      <h1>Build Your Pizza 🍕</h1>
+      <p>Click ingredients to add them onto your pizza</p>
+    </div>
+
+    <div class="builder-layout">
+
+      <!-- PIZZA DISH -->
+      <div class="pizza-stage">
+        <div class="pizza-dish" id="pizzaDish">
+          <!-- Base layer: dough + sauce, pure CSS -->
+          <div class="pizza-base"></div>
+
+          <!-- Cheese layer -->
+          <div class="topping-layer" id="layer-cheese"></div>
+
+          <!-- Pepperoni layer -->
+          <div class="topping-layer" id="layer-pepperoni"></div>
+
+          <!-- Onion layer -->
+          <div class="topping-layer" id="layer-onion"></div>
+
+          <!-- Olive layer -->
+          <div class="topping-layer" id="layer-olive"></div>
+
+          <!-- Mushroom layer -->
+          <div class="topping-layer" id="layer-mushroom"></div>
+
+          <!-- Basil layer -->
+          <div class="topping-layer" id="layer-basil"></div>
+        </div>
+
+        <div class="price-badge">
+          <i class="fa-solid fa-tag"></i> Total: $<span id="pizzaPrice">15</span>
+        </div>
+      </div>
+
+      <!-- PANEL — emoji icons on buttons as requested -->
+      <div class="panel">
+        <h3>Choose Toppings</h3>
+        <div class="toppings-grid">
+
+          <button class="topping-btn" id="btn-cheese" onclick="toggleTopping('cheese')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="t-icon">🧀</span>
+            <span class="topping-name">Cheese</span>
+            <span class="topping-price">+$2</span>
+          </button>
+
+          <button class="topping-btn" id="btn-pepperoni" onclick="toggleTopping('pepperoni')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="t-icon">🥩</span>
+            <span class="topping-name">Pepperoni</span>
+            <span class="topping-price">+$3</span>
+          </button>
+
+          <button class="topping-btn" id="btn-onion" onclick="toggleTopping('onion')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="t-icon">🧅</span>
+            <span class="topping-name">Onions</span>
+            <span class="topping-price">+$1</span>
+          </button>
+
+          <button class="topping-btn" id="btn-olive" onclick="toggleTopping('olive')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="t-icon">🫒</span>
+            <span class="topping-name">Olives</span>
+            <span class="topping-price">+$1</span>
+          </button>
+
+          <button class="topping-btn" id="btn-mushroom" onclick="toggleTopping('mushroom')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="t-icon">🍄</span>
+            <span class="topping-name">Mushrooms</span>
+            <span class="topping-price">+$2</span>
+          </button>
+
+          <button class="topping-btn" id="btn-basil" onclick="toggleTopping('basil')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="t-icon">🌿</span>
+            <span class="topping-name">Basil</span>
+            <span class="topping-price">+$1</span>
+          </button>
+
+        </div>
+
+        <div class="counter-row">
+          <span>Toppings selected</span>
+          <span class="counter-badge" id="toppingCount">0</span>
+        </div>
+        <div class="controls">
+          <button class="reset-btn" onclick="resetPizza()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button class="cart-add-btn" onclick="addPizzaToCart()"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART POPUP -->
+  <div class="popup-overlay" id="cartPopup">
+    <div class="popup-box">
+      <h2>Your Cart 🛒</h2>
+      <div class="cart-items" id="cartItems"></div>
+      <p class="total-text">Total: $<span id="cartTotal">0</span></p>
+      <button class="checkout-btn" onclick="checkout()">Checkout ✅</button>
+      <button class="close-btn" id="closeCart">Close</button>
+    </div>
+  </div>
+
+  <!-- REGISTER POPUP -->
+  <div class="popup-overlay" id="registerPopup">
+    <div class="popup-box">
+      <h2>Register 👤</h2>
+      <input type="text" id="regName" placeholder="Full Name">
+      <input type="email" id="regEmail" placeholder="Email">
+      <input type="password" id="regPass" placeholder="Password">
+      <button class="checkout-btn" onclick="register()">Register</button>
+      <button class="close-btn" id="closeRegister">Close</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const PRICES = { cheese:2, pepperoni:3, onion:1, olive:1, mushroom:2, basil:1 };
+    let active = {}, cart = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('loaded');
+      document.getElementById('openCart').addEventListener('click', () => { document.getElementById('cartPopup').style.display='flex'; renderCart(); });
+      document.getElementById('closeCart').addEventListener('click', () => { document.getElementById('cartPopup').style.display='none'; });
+      document.getElementById('openRegister').addEventListener('click', () => { document.getElementById('registerPopup').style.display='flex'; });
+      document.getElementById('closeRegister').addEventListener('click', () => { document.getElementById('registerPopup').style.display='none'; });
+    });
+
+    function toggleTopping(name) {
+      const layer = document.getElementById('layer-'+name);
+      const btn   = document.getElementById('btn-'+name);
+      if (active[name]) {
+        active[name]=false; btn.classList.remove('active');
+        layer.classList.remove('visible'); layer.style.opacity='0';
+      } else {
+        active[name]=true; btn.classList.add('active');
+        layer.classList.add('visible'); layer.style.opacity='1';
+        const dish = document.getElementById('pizzaDish');
+        dish.style.transform='scale(1.06) rotate(1deg)';
+        setTimeout(()=>dish.style.transform='',350);
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      const count=Object.values(active).filter(Boolean).length;
+      document.getElementById('toppingCount').textContent=count;
+      const extras=Object.entries(active).filter(([,v])=>v).reduce((s,[k])=>s+(PRICES[k]||0),0);
+      document.getElementById('pizzaPrice').textContent=15+extras;
+    }
+
+    function resetPizza() {
+      Object.keys(active).forEach(n=>{
+        active[n]=false;
+        const l=document.getElementById('layer-'+n); if(l){l.classList.remove('visible');l.style.opacity='0';}
+        const b=document.getElementById('btn-'+n); if(b)b.classList.remove('active');
+      });
+      updateUI(); showToast('🍕 Pizza reset!');
+    }
+
+    function addPizzaToCart() {
+      const sel=Object.entries(active).filter(([,v])=>v).map(([k])=>k);
+      if(!sel.length){showToast('⚠️ Add at least one topping!');return;}
+      const price=15+sel.reduce((s,k)=>s+(PRICES[k]||0),0);
+      const names=sel.map(t=>t[0].toUpperCase()+t.slice(1)).join(', ');
+      cart.push({name:`Custom Pizza (${names})`,price});
+      showToast(`✅ Pizza added! $${price}`);
+    }
+
+    function renderCart() {
+      const el=document.getElementById('cartItems'),tot=document.getElementById('cartTotal');
+      el.innerHTML=''; let sum=0;
+      cart.forEach((item,i)=>{sum+=item.price;el.innerHTML+=`<div class="cart-item"><span>${item.name} - $${item.price}</span><button onclick="removeFromCart(${i})">X</button></div>`;});
+      tot.textContent=sum;
+    }
+    function removeFromCart(i){cart.splice(i,1);renderCart();}
+    function checkout(){if(!cart.length){showToast('🛒 Cart is empty!');return;}showToast(`✅ Order placed! $${cart.reduce((s,i)=>s+i.price,0)}`);cart=[];renderCart();document.getElementById('cartPopup').style.display='none';}
+    function register(){const n=document.getElementById('regName').value,e=document.getElementById('regEmail').value,p=document.getElementById('regPass').value;if(!n||!e||!p){showToast('⚠️ Fill all fields!');return;}showToast(`🎉 Welcome ${n}!`);['regName','regEmail','regPass'].forEach(id=>document.getElementById(id).value='');document.getElementById('registerPopup').style.display='none';}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+    window.toggleTopping=toggleTopping;window.resetPizza=resetPizza;window.addPizzaToCart=addPizzaToCart;window.removeFromCart=removeFromCart;window.checkout=checkout;window.register=register;
+  </script>
+</body>
+</html>

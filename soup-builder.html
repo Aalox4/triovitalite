@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feane - Build Your Soup</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { background:#f5f5f5; opacity:0; transition:opacity 0.6s ease; padding-top:90px; }
+    body.loaded { opacity:1; }
+    .navbar { position:fixed; top:0; width:100%; padding:18px 60px; background:rgba(0,0,0,0.82); backdrop-filter:blur(10px); display:flex; justify-content:space-between; align-items:center; z-index:1000; }
+    .logo { font-family:'Pacifico',cursive; font-size:26px; color:white; }
+    nav a { color:white; text-decoration:none; margin:0 15px; font-size:14px; font-weight:500; transition:0.3s; }
+    nav a:hover { color:#f7b731; }
+    .nav-icons { display:flex; align-items:center; gap:15px; }
+    .nav-icons i { color:white; cursor:pointer; font-size:18px; transition:0.3s; }
+    .nav-icons i:hover { color:#f7b731; }
+    .order-btn { background:#f7b731; border:none; padding:10px 18px; border-radius:25px; cursor:pointer; font-weight:600; }
+    .builder { padding:60px 40px; min-height:100vh; }
+    .builder-header { text-align:center; margin-bottom:50px; }
+    .builder-header h1 { font-family:'Pacifico',cursive; font-size:50px; color:#1e272e; margin-bottom:10px; }
+    .builder-header p { color:#888; font-size:16px; }
+    .back-link { display:inline-flex; align-items:center; gap:8px; color:#f7b731; text-decoration:none; font-weight:600; font-size:14px; margin-bottom:20px; transition:0.3s; }
+    .back-link:hover { gap:14px; }
+    .builder-layout { display:flex; justify-content:center; align-items:flex-start; gap:70px; flex-wrap:wrap; max-width:1100px; margin:0 auto; }
+    .soup-stage { display:flex; flex-direction:column; align-items:center; gap:22px; }
+
+    /* ======= SOUP BOWL ======= */
+    .soup-bowl-wrap {
+      position:relative;
+      width:400px; height:400px;
+      display:flex; align-items:flex-end; justify-content:center;
+    }
+
+    /* Outer bowl */
+    .bowl-outer {
+      position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      width:390px; height:310px;
+      background:
+        radial-gradient(ellipse 100% 100% at 50% 50%, #f8f4ee 0%, #ede5d5 50%, #d8ccb8 80%, #c4b8a0 100%);
+      border-radius:50%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 -6px 12px rgba(0,0,0,0.12);
+      clip-path: ellipse(195px 155px at 50% 55%);
+    }
+    /* Inner cavity */
+    .bowl-inner {
+      position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+      width:320px; height:220px;
+      border-radius:50%;
+      overflow:hidden;
+      box-shadow: inset 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    /* ---- BROTH BASE ---- */
+    .broth-base {
+      position:absolute; inset:0;
+      transition:background 0.6s ease;
+    }
+
+    /* ---- SOUP LAYERS ---- */
+    .soup-layer { position:absolute; inset:0; opacity:0; transition:opacity 0.5s ease; }
+    .soup-layer.visible { opacity:1; animation:soupPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes soupPop { 0%{transform:scale(0.9);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+    /* Steam animation on the bowl rim */
+    .steam {
+      position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+      display:flex; gap:20px;
+    }
+    .steam-puff {
+      width:12px; height:40px;
+      background:linear-gradient(to top, rgba(255,255,255,0.6), transparent);
+      border-radius:50%;
+      animation:steamRise 2.5s ease-in-out infinite;
+      opacity:0.7;
+    }
+    .steam-puff:nth-child(2){ animation-delay:0.8s; }
+    .steam-puff:nth-child(3){ animation-delay:1.6s; }
+    @keyframes steamRise {
+      0%  { transform:translateY(0) scaleX(1);   opacity:0.6; }
+      50% { transform:translateY(-20px) scaleX(1.4); opacity:0.4; }
+      100%{ transform:translateY(-40px) scaleX(0.8); opacity:0; }
+    }
+
+    /* Chicken pieces */
+    #layer-chicken::before {
+      content:''; position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 30px 22px at 28% 40%, #d4943a 0%, #b07020 70%, transparent 85%),
+        radial-gradient(ellipse 26px 20px at 55% 35%, #c8882e 0%, #a06520 70%, transparent 85%),
+        radial-gradient(ellipse 28px 20px at 68% 60%, #d4943a 0%, #b07020 70%, transparent 85%),
+        radial-gradient(ellipse 22px 16px at 38% 65%, #c8882e 0%, #a06520 70%, transparent 85%);
+    }
+    /* Carrots */
+    #layer-carrot::before {
+      content:''; position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 22px 12px at 30% 38%, #e67e22 0%, #d35400 70%, transparent 85%),
+        radial-gradient(ellipse 20px 11px at 55% 32%, #f39c12 0%, #e67e22 70%, transparent 85%),
+        radial-gradient(ellipse 18px 10px at 65% 60%, #e67e22 0%, #d35400 70%, transparent 85%),
+        radial-gradient(ellipse 16px 9px  at 38% 64%, #f39c12 0%, #e67e22 70%, transparent 85%),
+        radial-gradient(ellipse 18px 10px at 74% 42%, #e67e22 0%, #d35400 70%, transparent 85%);
+    }
+    /* Corn */
+    #layer-corn::before {
+      content:''; position:absolute; inset:0;
+      background:
+        radial-gradient(circle 7px at 28% 38%, #f5d020 0%, transparent 100%),
+        radial-gradient(circle 6px at 38% 32%, #f0c800 0%, transparent 100%),
+        radial-gradient(circle 7px at 50% 40%, #f5d020 0%, transparent 100%),
+        radial-gradient(circle 6px at 60% 34%, #f0c800 0%, transparent 100%),
+        radial-gradient(circle 7px at 35% 55%, #f5d020 0%, transparent 100%),
+        radial-gradient(circle 6px at 48% 62%, #f0c800 0%, transparent 100%),
+        radial-gradient(circle 7px at 62% 57%, #f5d020 0%, transparent 100%),
+        radial-gradient(circle 6px at 72% 48%, #f0c800 0%, transparent 100%),
+        radial-gradient(circle 5px at 24% 65%, #f5d020 0%, transparent 100%),
+        radial-gradient(circle 5px at 72% 65%, #f0c800 0%, transparent 100%);
+    }
+    /* Noodles */
+    #layer-noodles::before {
+      content:''; position:absolute; inset:5%;
+      background:
+        repeating-linear-gradient(-20deg,
+          rgba(245,208,100,0.8) 0px, rgba(245,208,100,0.8) 3px,
+          transparent 3px, transparent 8px,
+          rgba(228,185,70,0.75) 8px, rgba(228,185,70,0.75) 11px,
+          transparent 11px, transparent 16px);
+    }
+    /* Mushrooms */
+    #layer-mushrooms::before {
+      content:''; position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 24px 18px at 32% 38%, #b8915a 0%, #8a6535 65%, transparent 80%),
+        radial-gradient(ellipse 22px 16px at 58% 32%, #b8915a 0%, #8a6535 65%, transparent 80%),
+        radial-gradient(ellipse 20px 14px at 52% 64%, #b8915a 0%, #8a6535 65%, transparent 80%),
+        radial-gradient(ellipse 18px 13px at 72% 54%, #b8915a 0%, #8a6535 65%, transparent 80%);
+    }
+    /* Spring onion */
+    #layer-onion::before {
+      content:''; position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 6px 20px at 30% 45%, #5cb85c 0%, #3a8a3a 70%, transparent 85%),
+        radial-gradient(ellipse 5px 18px at 45% 38%, #66bb6a 0%, #4a9a4a 70%, transparent 85%),
+        radial-gradient(ellipse 6px 20px at 60% 50%, #5cb85c 0%, #3a8a3a 70%, transparent 85%),
+        radial-gradient(ellipse 5px 16px at 72% 42%, #66bb6a 0%, #4a9a4a 70%, transparent 85%);
+    }
+    /* Cream swirl */
+    #layer-cream::before {
+      content:''; position:absolute;
+      top:25%; left:25%; width:50%; height:50%;
+      background: conic-gradient(from 0deg, rgba(255,255,255,0.85) 0deg, transparent 90deg, rgba(255,255,255,0.6) 180deg, transparent 270deg, rgba(255,255,255,0.85) 360deg);
+      border-radius:50%;
+    }
+
+    /* Bowl highlight shimmer */
+    .bowl-shine {
+      position:absolute; top:8%; left:12%; width:30%; height:25%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.4) 0%, transparent 70%);
+      border-radius:50%; pointer-events:none;
+    }
+
+    /* Broth colors per type */
+    .broth-chicken  { background: radial-gradient(ellipse at 50% 40%, #f5e090 0%, #e8c840 40%, #c8a020 100%); }
+    .broth-tomato   { background: radial-gradient(ellipse at 50% 40%, #e07060 0%, #c84030 40%, #a02010 100%); }
+    .broth-veggie   { background: radial-gradient(ellipse at 50% 40%, #a8c850 0%, #80a030 40%, #507010 100%); }
+
+    /* Price badge */
+    .price-badge { background:#1e272e; color:#f7b731; padding:13px 32px; border-radius:25px; font-size:21px; font-weight:700; display:flex; align-items:center; gap:10px; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+
+    /* PANEL */
+    .panel { background:#1e272e; border-radius:24px; padding:35px 30px; color:white; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
+    .panel h3 { font-family:'Pacifico',cursive; font-size:26px; color:#f7b731; margin-bottom:8px; }
+    .panel .subtitle { font-size:12px; opacity:0.6; margin-bottom:20px; }
+    .section-label { font-size:12px; text-transform:uppercase; letter-spacing:1px; opacity:0.5; margin-bottom:12px; font-weight:600; }
+
+    .broth-selector { display:flex; gap:8px; margin-bottom:22px; }
+    .broth-opt { flex:1; background:rgba(255,255,255,0.07); border:2px solid transparent; border-radius:12px; padding:12px 6px; cursor:pointer; color:white; text-align:center; font-size:11px; font-weight:500; transition:all 0.3s; }
+    .broth-opt:hover { border-color:rgba(247,183,49,0.5); }
+    .broth-opt.active { border-color:#f7b731; background:rgba(247,183,49,0.15); }
+    .broth-opt .be { font-size:24px; display:block; margin-bottom:4px; }
+
+    .toppings-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
+    .topping-btn { background:rgba(255,255,255,0.07); border:2px solid transparent; border-radius:14px; padding:14px 8px; cursor:pointer; color:white; display:flex; flex-direction:column; align-items:center; gap:6px; transition:all 0.3s; position:relative; }
+    .topping-btn:hover { background:rgba(247,183,49,0.15); border-color:#f7b731; transform:translateY(-3px); }
+    .topping-btn.active { background:rgba(247,183,49,0.2); border-color:#f7b731; }
+    .topping-btn .check { position:absolute; top:7px; right:7px; width:16px; height:16px; background:#f7b731; border-radius:50%; display:none; align-items:center; justify-content:center; font-size:9px; color:#1e272e; }
+    .topping-btn.active .check { display:flex; }
+    .t-icon { font-size:28px; transition:transform 0.3s; }
+    .topping-btn:hover .t-icon { transform:scale(1.2) rotate(8deg); }
+    .topping-name { font-size:12px; font-weight:500; }
+    .topping-price { font-size:11px; color:#f7b731; }
+
+    .counter-row { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.07); border-radius:12px; padding:12px 16px; margin-bottom:18px; }
+    .counter-row span { font-size:14px; opacity:0.8; }
+    .counter-badge { background:#f7b731; color:#1e272e; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+    .controls { display:flex; gap:10px; }
+    .reset-btn { flex:1; background:transparent; border:2px solid #f7b731; color:#f7b731; padding:13px; border-radius:25px; font-weight:600; cursor:pointer; transition:all 0.3s; font-size:13px; }
+    .reset-btn:hover { background:#f7b731; color:#1e272e; }
+    .cart-add-btn { flex:2; background:#f7b731; border:none; color:#1e272e; padding:13px; border-radius:25px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .cart-add-btn:hover { background:#ffcc4d; }
+
+    .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:2000; }
+    .popup-box { width:420px; background:#1e272e; color:white; padding:30px; border-radius:20px; animation:pop 0.35s ease; }
+    @keyframes pop{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+    .popup-box h2 { font-family:'Pacifico',cursive; margin-bottom:20px; color:#f7b731; }
+    .popup-box input { width:100%; margin:8px 0; padding:12px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white; font-size:14px; }
+    .popup-box input::placeholder { color:rgba(255,255,255,0.5); }
+    .cart-items { max-height:160px; overflow-y:auto; margin-bottom:15px; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:10px; margin-bottom:8px; font-size:14px; }
+    .cart-item button { background:#e74c3c; border:none; color:white; padding:4px 10px; border-radius:8px; cursor:pointer; }
+    .total-text { font-size:18px; font-weight:600; margin:10px 0; }
+    .checkout-btn { width:100%; background:#f7b731; border:none; padding:14px; border-radius:25px; font-weight:700; cursor:pointer; margin-top:10px; font-size:15px; }
+    .close-btn { width:100%; background:transparent; border:2px solid #f7b731; padding:12px; border-radius:25px; color:#f7b731; cursor:pointer; margin-top:10px; font-weight:600; }
+    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e272e; color:#f7b731; padding:14px 28px; border-radius:25px; font-weight:600; font-size:15px; box-shadow:0 10px 30px rgba(0,0,0,0.4); border:1px solid rgba(247,183,49,0.3); transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); z-index:9999; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    @media(max-width:768px){ .navbar{padding:18px 20px;} .soup-bowl-wrap{width:300px;height:300px;} .panel{width:290px;} }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Feane</div>
+    <nav><a href="home.html">HOME</a><a href="menu.html">MENU</a><a href="about.html">ABOUT</a></nav>
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <div class="builder">
+    <div style="text-align:center"><a href="food-select.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Food Selection</a></div>
+    <div class="builder-header">
+      <h1>Build Your Soup 🍲</h1>
+      <p>Choose your broth and load it up with ingredients</p>
+    </div>
+
+    <div class="builder-layout">
+      <div class="soup-stage">
+        <div class="soup-bowl-wrap" id="soupBowl">
+          <div class="steam">
+            <div class="steam-puff"></div>
+            <div class="steam-puff"></div>
+            <div class="steam-puff"></div>
+          </div>
+          <div class="bowl-outer"></div>
+          <div class="bowl-inner" id="bowlInner">
+            <div class="broth-base broth-chicken" id="brothBase"></div>
+            <!-- ingredient layers -->
+            <div class="soup-layer" id="layer-chicken"></div>
+            <div class="soup-layer" id="layer-carrot"></div>
+            <div class="soup-layer" id="layer-corn"></div>
+            <div class="soup-layer" id="layer-noodles"></div>
+            <div class="soup-layer" id="layer-mushrooms"></div>
+            <div class="soup-layer" id="layer-onion"></div>
+            <div class="soup-layer" id="layer-cream"></div>
+          </div>
+          <div class="bowl-shine"></div>
+        </div>
+        <div class="price-badge"><i class="fa-solid fa-tag"></i> Total: $<span id="soupPrice">9</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Build It</h3>
+        <p class="subtitle">Choose your broth and ingredients</p>
+
+        <p class="section-label">Broth Type</p>
+        <div class="broth-selector">
+          <div class="broth-opt active" id="broth-chicken" onclick="selectBroth('chicken')"><span class="be">🍗</span>Chicken</div>
+          <div class="broth-opt" id="broth-tomato"  onclick="selectBroth('tomato')"> <span class="be">🍅</span>Tomato</div>
+          <div class="broth-opt" id="broth-veggie"  onclick="selectBroth('veggie')"> <span class="be">🥦</span>Veggie</div>
+        </div>
+
+        <p class="section-label">Ingredients</p>
+        <div class="toppings-grid">
+          <button class="topping-btn" id="btn-chicken"   onclick="toggleIng('chicken')">  <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🍗</span><span class="topping-name">Chicken</span><span class="topping-price">+$3</span></button>
+          <button class="topping-btn" id="btn-carrot"    onclick="toggleIng('carrot')">   <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🥕</span><span class="topping-name">Carrots</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-corn"      onclick="toggleIng('corn')">     <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🌽</span><span class="topping-name">Corn</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-noodles"   onclick="toggleIng('noodles')">  <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🍜</span><span class="topping-name">Noodles</span><span class="topping-price">+$2</span></button>
+          <button class="topping-btn" id="btn-mushrooms" onclick="toggleIng('mushrooms')"><span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🍄</span><span class="topping-name">Mushrooms</span><span class="topping-price">+$2</span></button>
+          <button class="topping-btn" id="btn-onion"     onclick="toggleIng('onion')">    <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🌱</span><span class="topping-name">Spring Onion</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-cream"     onclick="toggleIng('cream')">    <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🥛</span><span class="topping-name">Cream Swirl</span><span class="topping-price">+$1</span></button>
+        </div>
+
+        <div class="counter-row"><span>Ingredients added</span><span class="counter-badge" id="count">0</span></div>
+        <div class="controls">
+          <button class="reset-btn" onclick="reset()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button class="cart-add-btn" onclick="addToCart()"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="cartPopup"><div class="popup-box"><h2>Your Cart 🛒</h2><div class="cart-items" id="cartItems"></div><p class="total-text">Total: $<span id="cartTotal">0</span></p><button class="checkout-btn" onclick="checkout()">Checkout ✅</button><button class="close-btn" id="closeCart">Close</button></div></div>
+  <div class="popup-overlay" id="registerPopup"><div class="popup-box"><h2>Register 👤</h2><input type="text" id="regName" placeholder="Full Name"><input type="email" id="regEmail" placeholder="Email"><input type="password" id="regPass" placeholder="Password"><button class="checkout-btn" onclick="register()">Register</button><button class="close-btn" id="closeRegister">Close</button></div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const ING_PRICES={chicken:3,carrot:1,corn:1,noodles:2,mushrooms:2,onion:1,cream:1};
+    const BROTH_CLASSES={chicken:'broth-chicken',tomato:'broth-tomato',veggie:'broth-veggie'};
+    let activeIngs={},currentBroth='chicken',cart=[];
+
+    window.addEventListener('DOMContentLoaded',()=>{
+      document.body.classList.add('loaded');
+      document.getElementById('openCart').addEventListener('click',()=>{document.getElementById('cartPopup').style.display='flex';renderCart();});
+      document.getElementById('closeCart').addEventListener('click',()=>{document.getElementById('cartPopup').style.display='none';});
+      document.getElementById('openRegister').addEventListener('click',()=>{document.getElementById('registerPopup').style.display='flex';});
+      document.getElementById('closeRegister').addEventListener('click',()=>{document.getElementById('registerPopup').style.display='none';});
+    });
+
+    function selectBroth(b){
+      currentBroth=b;
+      ['chicken','tomato','veggie'].forEach(x=>document.getElementById('broth-'+x).classList.remove('active'));
+      document.getElementById('broth-'+b).classList.add('active');
+      const base=document.getElementById('brothBase');
+      base.className='broth-base '+BROTH_CLASSES[b];
+      bounce();
+    }
+    function toggleIng(name){
+      const layer=document.getElementById('layer-'+name),btn=document.getElementById('btn-'+name);
+      if(activeIngs[name]){activeIngs[name]=false;btn.classList.remove('active');layer.classList.remove('visible');layer.style.opacity='0';}
+      else{activeIngs[name]=true;btn.classList.add('active');layer.classList.add('visible');layer.style.opacity='1';bounce();}
+      updateUI();
+    }
+    function bounce(){const b=document.getElementById('soupBowl');b.style.transform='scale(1.04)';setTimeout(()=>b.style.transform='',350);}
+    function updateUI(){const c=Object.values(activeIngs).filter(Boolean).length;document.getElementById('count').textContent=c;const e=Object.entries(activeIngs).filter(([,v])=>v).reduce((s,[k])=>s+(ING_PRICES[k]||0),0);document.getElementById('soupPrice').textContent=9+e;}
+    function reset(){Object.keys(activeIngs).forEach(n=>{activeIngs[n]=false;const l=document.getElementById('layer-'+n);if(l){l.classList.remove('visible');l.style.opacity='0';}const b=document.getElementById('btn-'+n);if(b)b.classList.remove('active');});updateUI();showToast('🍲 Soup reset!');}
+    function addToCart(){const sel=Object.entries(activeIngs).filter(([,v])=>v).map(([k])=>k);if(!sel.length){showToast('⚠️ Add at least one ingredient!');return;}const price=9+sel.reduce((s,k)=>s+(ING_PRICES[k]||0),0);const names=sel.map(t=>t[0].toUpperCase()+t.slice(1)).join(', ');cart.push({name:`${currentBroth[0].toUpperCase()+currentBroth.slice(1)} Soup (${names})`,price});showToast(`✅ Soup added! $${price}`);}
+    function renderCart(){const el=document.getElementById('cartItems'),tot=document.getElementById('cartTotal');el.innerHTML='';let sum=0;cart.forEach((item,i)=>{sum+=item.price;el.innerHTML+=`<div class="cart-item"><span>${item.name} - $${item.price}</span><button onclick="removeFromCart(${i})">X</button></div>`;});tot.textContent=sum;}
+    function removeFromCart(i){cart.splice(i,1);renderCart();}
+    function checkout(){if(!cart.length){showToast('🛒 Cart is empty!');return;}showToast(`✅ Order placed! $${cart.reduce((s,i)=>s+i.price,0)}`);cart=[];renderCart();document.getElementById('cartPopup').style.display='none';}
+    function register(){const n=document.getElementById('regName').value,e=document.getElementById('regEmail').value,p=document.getElementById('regPass').value;if(!n||!e||!p){showToast('⚠️ Fill all fields!');return;}showToast(`🎉 Welcome ${n}!`);['regName','regEmail','regPass'].forEach(id=>document.getElementById(id).value='');document.getElementById('registerPopup').style.display='none';}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+    window.selectBroth=selectBroth;window.toggleIng=toggleIng;window.reset=reset;window.addToCart=addToCart;window.removeFromCart=removeFromCart;window.checkout=checkout;window.register=register;
+  </script>
+</body>
+</html>

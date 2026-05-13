@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feane - Menu</title>
+  <link rel="stylesheet" href="menu.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+
+
+
+/* ===== POPUP OVERLAY (DARK BLUR BACKGROUND) ===== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.4s ease;
+}
+
+/* SHOW POPUP */
+.popup-overlay.active {
+  display: flex;
+}
+
+/* ===== POPUP BOX (GLASS EFFECT) ===== */
+.popup-box {
+  width: 380px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  text-align: center;
+  animation: slideUp 0.5s ease;
+}
+
+/* ===== TITLES ===== */
+.popup-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ===== INPUTS ===== */
+.popup-box input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.popup-box input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.popup-box input:focus {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.02);
+}
+
+/* ===== RADIO BUTTONS ===== */
+.radio-group {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.radio-group label {
+  cursor: pointer;
+}
+
+/* ===== TOTAL TEXT ===== */
+.total-text {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== ORANGE BUTTON (UPDATED 🔥) ===== */
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #f7b731, #ffcc4d);
+  color: #1e272e;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 6px 20px rgba(247,183,49,0.4);
+}
+
+.checkout-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(247,183,49,0.6);
+}
+
+/* ===== CLOSE BUTTON ===== */
+.close-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+
+    
+    /* ===== FLOATING BUBBLES ===== */
+    .bubbles-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255, 204, 77, 0.55), rgba(247, 183, 49, 0.18));
+      border: 1px solid rgba(247, 183, 49, 0.25);
+      animation: bubbleRise linear infinite;
+    }
+    @keyframes bubbleRise {
+      0%   { transform: translateY(0)   scale(1)   rotate(0deg); opacity: 0; }
+      8%   { opacity: 1; }
+      90%  { opacity: 0.7; }
+      100% { transform: translateY(-110vh) scale(1.1) rotate(25deg); opacity: 0; }
+    }
+
+    /* Make sure page content sits above bubbles */
+    .navbar     { z-index: 1000; }
+    .menu-section { position: relative; z-index: 1; }
+
+    /* ===== BUILD YOUR MEAL BUTTON (under title) ===== */
+    .build-meal-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: -10px 0 45px;   /* tight gap below title, space before grid */
+    }
+
+    .build-meal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #f7b731, #ffcc4d);
+      color: #1e272e;
+      text-decoration: none;
+      padding: 15px 32px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: 0 8px 28px rgba(247, 183, 49, 0.45), 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: btnFloat 3s ease-in-out infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes btnFloat {
+      0%,100% { transform: translateY(0);    box-shadow: 0 8px 28px rgba(247,183,49,0.45), 0 4px 10px rgba(0,0,0,0.15); }
+      50%      { transform: translateY(-6px); box-shadow: 0 16px 38px rgba(247,183,49,0.55), 0 8px 18px rgba(0,0,0,0.2); }
+    }
+
+    .build-meal-btn:hover {
+      transform: translateY(-8px) scale(1.06) !important;
+      box-shadow: 0 20px 48px rgba(247,183,49,0.62), 0 8px 20px rgba(0,0,0,0.25) !important;
+      animation: none;
+    }
+
+    .build-meal-btn .btn-icon {
+      font-size: 22px;
+      width: 36px; height: 36px;
+      background: rgba(30,39,46,0.14);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.3s ease;
+    }
+    .build-meal-btn:hover .btn-icon { transform: rotate(20deg) scale(1.15); }
+
+    .build-meal-btn .btn-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .build-meal-btn .btn-text .line1 {
+      font-size: 10px; font-weight: 500;
+      opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .build-meal-btn .btn-text .line2 {
+      font-size: 15px; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FLOATING BUBBLES BACKGROUND -->
+  <div class="bubbles-bg" id="bubblesContainer"></div>
+
+   <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">Trio Vitalité</div>
+
+    <nav>
+      <a href="home.html" >HOME</a>
+      <a href="menu.html" class="active">MENU</a>
+      <a href="about.html">ABOUT</a>
+      <a href="home.html#contact">CONTACT</a>
+    </nav>
+
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <section class="menu-section">
+    <h2 class="section-title">Our Full Menu</h2>
+
+    <!-- BUILD YOUR MEAL BUTTON -->
+    <div class="build-meal-wrapper">
+      <a href="food-select.html" class="build-meal-btn">
+        <span class="btn-icon">✨</span>
+        <span class="btn-text">
+          <span class="line1">Interactive</span>
+          <span class="line2">Build Your Meal</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="menu-grid">
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f3.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Double Burger</h3>
+          <p>Best burger with double cheese and sauce.</p>
+          <div class="menu-bottom">
+            <span>$25</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f4.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Italian Pizza</h3>
+          <p>Fresh pizza with extra mozzarella.</p>
+          <div class="menu-bottom">
+            <span>$22</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f5.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Spaghetti Pasta</h3>
+          <p>Classic pasta with tomato sauce.</p>
+          <div class="menu-bottom">
+            <span>$18</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DUPLICATE MORE ITEMS FOR LONG MENU -->
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f6.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Chicken Burger</h3>
+          <p>Grilled chicken burger with lettuce.</p>
+          <div class="menu-bottom">
+            <span>$19</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f7.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Cheese Pizza</h3>
+          <p>Super cheesy pizza for cheese lovers.</p>
+          <div class="menu-bottom">
+            <span>$20</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f8.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Carbonara Pasta</h3>
+          <p>Rich creamy carbonara pasta.</p>
+          <div class="menu-bottom">
+            <span>$21</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f6.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Chicken Burger</h3>
+          <p>Grilled chicken burger with lettuce.</p>
+          <div class="menu-bottom">
+            <span>$19</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f7.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Cheese Pizza</h3>
+          <p>Super cheesy pizza for cheese lovers.</p>
+          <div class="menu-bottom">
+            <span>$20</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f8.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Carbonara Pasta</h3>
+          <p>Rich creamy carbonara pasta.</p>
+          <div class="menu-bottom">
+            <span>$21</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f6.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Chicken Burger</h3>
+          <p>Grilled chicken burger with lettuce.</p>
+          <div class="menu-bottom">
+            <span>$19</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f7.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Cheese Pizza</h3>
+          <p>Super cheesy pizza for cheese lovers.</p>
+          <div class="menu-bottom">
+            <span>$20</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f8.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Carbonara Pasta</h3>
+          <p>Rich creamy carbonara pasta.</p>
+          <div class="menu-bottom">
+            <span>$21</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f6.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Chicken Burger</h3>
+          <p>Grilled chicken burger with lettuce.</p>
+          <div class="menu-bottom">
+            <span>$19</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f7.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Cheese Pizza</h3>
+          <p>Super cheesy pizza for cheese lovers.</p>
+          <div class="menu-bottom">
+            <span>$20</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-img">
+          <img src="assets/f8.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Carbonara Pasta</h3>
+          <p>Rich creamy carbonara pasta.</p>
+          <div class="menu-bottom">
+            <span>$21</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+
+      
+
+    </div>
+
+    
+
+
+
+
+<!-- CART POPUP -->
+<div class="popup-overlay" id="cartPopup">
+  <div class="popup-box">
+    <h2>Your Panier </h2>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <h3>Choose Order Type:</h3>
+    <div class="radio-group">
+      <label><input type="radio" name="type" value="School"> School</label>
+      <label><input type="radio" name="type" value="Company"> Company</label>
+      <label><input type="radio" name="type" value="Client"> One Client</label>
+    </div>
+
+    <input type="text" placeholder="Full Name">
+    <input type="text" placeholder="Delivery Address">
+    <input type="text" placeholder="Phone Number">
+
+    <h3 class="total-text">Total: $<span>0</span></h3>
+
+    <button class="checkout-btn">Checkout</button>
+    <button class="close-btn" id="closeCart">Close</button>
+  </div>
+</div>
+
+<!-- REGISTER POPUP -->
+<div class="popup-overlay" id="registerPopup">
+  <div class="popup-box">
+    <h2>Register </h2>
+
+    <input type="text" placeholder="Full Name">
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Password">
+
+    <button class="checkout-btn">Register</button>
+    <button class="close-btn" id="closeRegister">Close</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  </section>
+
+  <script src="menu.js"></script>
+  <script>
+    // Generate floating bubbles
+    const container = document.getElementById('bubblesContainer');
+    const bubbleCount = 18;
+    for (let i = 0; i < bubbleCount; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = Math.random() * 55 + 18;          // 18px – 73px
+      const left = Math.random() * 100;               // 0% – 100%
+      const duration = Math.random() * 14 + 9;        // 9s – 23s
+      const delay = Math.random() * 14;               // stagger start
+      b.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${left}%;
+        animation-duration:${duration}s;
+        animation-delay:${delay}s;
+      `;
+      container.appendChild(b);
+    }
+
+
+
+
+
+
+
+
+    const cartBtn = document.getElementById("openCart");
+const registerBtn = document.getElementById("openRegister");
+
+const cartPopup = document.getElementById("cartPopup");
+const registerPopup = document.getElementById("registerPopup");
+
+const closeCart = document.getElementById("closeCart");
+const closeRegister = document.getElementById("closeRegister");
+
+// OPEN
+cartBtn.onclick = () => cartPopup.classList.add("active");
+registerBtn.onclick = () => registerPopup.classList.add("active");
+
+// CLOSE
+closeCart.onclick = () => cartPopup.classList.remove("active");
+closeRegister.onclick = () => registerPopup.classList.remove("active");
+
+// CLOSE when clicking outside
+window.onclick = (e) => {
+  if (e.target === cartPopup) cartPopup.classList.remove("active");
+  if (e.target === registerPopup) registerPopup.classList.remove("active");
+};
+  </script>
+</body>
+</html>

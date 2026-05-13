@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trio Vitalité - Home</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+/* ===== POPUP OVERLAY (DARK BLUR BACKGROUND) ===== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.4s ease;
+}
+
+/* SHOW POPUP */
+.popup-overlay.active {
+  display: flex;
+}
+
+/* ===== POPUP BOX (GLASS EFFECT) ===== */
+.popup-box {
+  width: 380px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  text-align: center;
+  animation: slideUp 0.5s ease;
+}
+
+/* ===== TITLES ===== */
+.popup-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ===== INPUTS ===== */
+.popup-box input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.popup-box input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.popup-box input:focus {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.02);
+}
+
+/* ===== RADIO BUTTONS ===== */
+.radio-group {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.radio-group label {
+  cursor: pointer;
+}
+
+/* ===== TOTAL TEXT ===== */
+.total-text {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== ORANGE BUTTON (UPDATED 🔥) ===== */
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #f7b731, #ffcc4d);
+  color: #1e272e;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 6px 20px rgba(247,183,49,0.4);
+}
+
+.checkout-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(247,183,49,0.6);
+}
+
+/* ===== CLOSE BUTTON ===== */
+.close-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+
+
+
+    
+
+    html {
+  scroll-behavior: smooth;
+}
+
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease;
+}
+
+.scroll-animate.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+    /* ===== FLOATING CUSTOMIZE BUTTON ===== */
+    .float-customize {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      z-index: 1500;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .float-customize-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #f7b731, #ffcc4d);
+      color: #1e272e;
+      border: none;
+      padding: 16px 26px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(247, 183, 49, 0.5), 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none;
+      white-space: nowrap;
+      animation: floatPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes floatPulse {
+      0%, 100% { transform: translateY(0px); box-shadow: 0 8px 30px rgba(247,183,49,0.5), 0 4px 12px rgba(0,0,0,0.2); }
+      50% { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(247,183,49,0.6), 0 8px 20px rgba(0,0,0,0.25); }
+    }
+
+    .float-customize-btn:hover {
+      transform: translateY(-8px) scale(1.06) !important;
+      box-shadow: 0 20px 50px rgba(247,183,49,0.65), 0 8px 20px rgba(0,0,0,0.3) !important;
+      animation: none;
+    }
+
+    .float-customize-btn .btn-icon {
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(30,39,46,0.15);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .float-customize-btn:hover .btn-icon {
+      transform: rotate(20deg) scale(1.15);
+    }
+
+    .float-customize-btn .btn-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .float-customize-btn .btn-text .line1 {
+      font-size: 10px;
+      font-weight: 500;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .float-customize-btn .btn-text .line2 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">Trio Vitalité</div>
+
+    <nav>
+      <a href="home.html" class="active">HOME</a>
+      <a href="menu.html">MENU</a>
+      <a href="about.html">ABOUT</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <video autoplay muted loop class="hero-video">
+      <source src="assets/hero-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="hero-content">
+      <h1>Fast Food Restaurant</h1>
+      <p>
+        Doloremque, itaque aperiam facilis rerum, commodi, temporibus sapiente ad
+        mollitia laborum quam quisquam esse error unde.
+      </p>
+      <button class="hero-btn">Order Now</button>
+    </div>
+  </section>
+
+  <!-- MENU SECTION -->
+  <section class="menu-section scroll-animate">
+    <h2 class="section-title">Our Menu</h2>
+
+    <div class="menu-tabs">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="burger">Burger</button>
+      <button class="tab" data-filter="pizza">Pizza</button>
+      <button class="tab" data-filter="pasta">Pasta</button>
+      <button class="tab" data-filter="fries">Fries</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <div class="menu-card" data-category="pizza">
+        <div class="menu-img">
+          <img src="assets/f1.png" alt="Pizza">
+        </div>
+        <div class="menu-info">
+          <h3>Delicious Pizza</h3>
+          <p>Venam debitis quaerat officiis quasi cupiditate quo.</p>
+          <div class="menu-bottom">
+            <span>$20</span>
+            <button class="cart-btn" onclick="addToCart('Delicious Pizza', 20)">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burger">
+        <div class="menu-img">
+          <img src="assets/f2.png" alt="Burger">
+        </div>
+        <div class="menu-info">
+          <h3>Delicious Burger</h3>
+          <p>Venam debitis quaerat officiis quasi cupiditate quo.</p>
+          <div class="menu-bottom">
+            <span>$15</span>
+            <button class="cart-btn" onclick="addToCart('Delicious Burger', 15)">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pizza">
+        <div class="menu-img">
+          <img src="assets/f3.png" alt="Pizza">
+        </div>
+        <div class="menu-info">
+          <h3>Delicious Pizza</h3>
+          <p>Venam debitis quaerat officiis quasi cupiditate quo.</p>
+          <div class="menu-bottom">
+            <span>$17</span>
+            <button class="cart-btn" onclick="addToCart('Delicious Pizza', 17)">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="view-more">
+      <a href="menu.html" class="view-btn">View More</a>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="about-section scroll-animate" id="about">
+    <div class="about-img">
+      <img src="assets/about-img.png" alt="Burger Layers">
+    </div>
+
+    <div class="about-text">
+      <h2>We Are Feane</h2>
+      <p>
+        There are many variations of passages of Lorem Ipsum available, but the majority
+        have suffered alteration in some form.
+      </p>
+      <button class="hero-btn">Read More</button>
+    </div>
+  </section>
+
+  <!-- TEAM SECTION -->
+  <section class="team-section scroll-animate">
+    <h2 class="section-title">Our Team</h2>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <h3>Aalox YT</h3>
+        <p>Creator of the Website</p>
+      </div>
+      <div class="team-card">
+        <h3>Girl Name 2</h3>
+        <p>Idea Contributor</p>
+      </div>
+      <div class="team-card">
+        <h3>Girl Name 3</h3>
+        <p>Idea Contributor</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section class="contact-section scroll-animate" id="contact">
+    <h2 class="section-title">Contact Us</h2>
+
+    <form class="contact-form">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <input type="text" placeholder="Phone Number" required>
+      <textarea placeholder="Your Message..." required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- FLOATING CUSTOMIZE BUTTON -->
+  <div class="float-customize">
+    <a href="food-select.html" class="float-customize-btn">
+      <span class="btn-icon">✨</span>
+      <span class="btn-text">
+        <span class="line1">Interactive</span>
+        <span class="line2">Build Your Meal</span>
+      </span>
+    </a>
+  </div>
+
+  <!-- CART POPUP -->
+  <div class="popup-overlay" id="cartPopup">
+    <div class="popup-box">
+      <h2>Your Panier </h2>
+
+      <div class="cart-items" id="cartItems"></div>
+
+      <h3>Choose Order Type:</h3>
+      <div class="radio-group">
+        <label><input type="radio" name="type" value="School" required> School</label>
+        <label><input type="radio" name="type" value="Company"> Company</label>
+        <label><input type="radio" name="type" value="Client"> One Client</label>
+      </div>
+
+      <input type="text" id="fullname" placeholder="Full Name" required>
+      <input type="text" id="address" placeholder="Delivery Address" required>
+      <input type="text" id="phone" placeholder="Phone Number" required>
+
+      <h3 class="total-text">Total: $<span id="cartTotal">0</span></h3>
+
+      <button class="checkout-btn" onclick="checkout()">Checkout</button>
+      <button class="close-btn" id="closeCart">Close</button>
+    </div>
+  </div>
+
+  <!-- REGISTER POPUP -->
+  <div class="popup-overlay" id="registerPopup">
+    <div class="popup-box">
+      <h2>Register </h2>
+
+      <input type="text" id="regName" placeholder="Full Name" required>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPass" placeholder="Password" required>
+
+      <button class="checkout-btn" onclick="register()">Register</button>
+      <button class="close-btn" id="closeRegister">Close</button>
+    </div>
+  </div>
+
+  <script src="home.js"></script>
+</body>
+</html>

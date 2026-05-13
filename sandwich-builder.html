@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feane - Build Your Sandwich</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { background:#f5f5f5; opacity:0; transition:opacity 0.6s ease; padding-top:90px; }
+    body.loaded { opacity:1; }
+
+    .navbar { position:fixed; top:0; width:100%; padding:18px 60px; background:rgba(0,0,0,0.82); backdrop-filter:blur(10px); display:flex; justify-content:space-between; align-items:center; z-index:1000; }
+    .logo { font-family:'Pacifico',cursive; font-size:26px; color:white; }
+    nav a { color:white; text-decoration:none; margin:0 15px; font-size:14px; font-weight:500; transition:0.3s; }
+    nav a:hover { color:#f7b731; }
+    .nav-icons { display:flex; align-items:center; gap:15px; }
+    .nav-icons i { color:white; cursor:pointer; font-size:18px; transition:0.3s; }
+    .nav-icons i:hover { color:#f7b731; }
+    .order-btn { background:#f7b731; border:none; padding:10px 18px; border-radius:25px; cursor:pointer; font-weight:600; }
+
+    .builder { padding:60px 40px; min-height:100vh; }
+    .builder-header { text-align:center; margin-bottom:50px; }
+    .builder-header h1 { font-family:'Pacifico',cursive; font-size:50px; color:#1e272e; margin-bottom:10px; }
+    .builder-header p { color:#888; font-size:16px; }
+    .back-link { display:inline-flex; align-items:center; gap:8px; color:#f7b731; text-decoration:none; font-weight:600; font-size:14px; margin-bottom:20px; transition:0.3s; }
+    .back-link:hover { gap:14px; }
+
+    .builder-layout { display:flex; justify-content:center; align-items:flex-start; gap:70px; flex-wrap:wrap; max-width:1100px; margin:0 auto; }
+    .sandwich-stage { display:flex; flex-direction:column; align-items:center; gap:22px; }
+
+    /* ======= SANDWICH CROSS-SECTION ======= */
+    /*
+      The sandwich is shown as a vertical stack of CSS "ingredient bands".
+      Each band is a colored strip with realistic gradients.
+      They stack to look like a real cross-section cut.
+    */
+    .sandwich-wrap {
+      width: 440px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 6px #f7b731,
+        0 0 0 10px rgba(247,183,49,0.25),
+        0 30px 70px rgba(0,0,0,0.3);
+      transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .sandwich-wrap:hover { transform: scale(1.02); }
+
+    /* Each ingredient band */
+    .ing-band {
+      width: 100%;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .ing-band.show { max-height: 80px; }
+    .ing-band.bun   { max-height: 90px; } /* always shown */
+
+    /* The actual visual content inside each band */
+    .ing-inner {
+      width: 100%;
+      height: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .bun .ing-inner { height: 90px; }
+
+    /* ---- TOP BUN ---- */
+    .bun-top .ing-inner {
+      /* Rounded dome shape via border-radius + gradient */
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 30%,  #f5c878 0%, #e8a840 35%, #c97b2a 70%, #a85c1a 100%);
+      border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+    }
+    /* Sesame seeds on top bun */
+    .bun-top .ing-inner::after {
+      content:''; position:absolute; top:18px; left:0; right:0; height:30px;
+      background:
+        radial-gradient(ellipse 10px 5px at 30% 40%, rgba(255,240,180,0.85) 0%, transparent 100%),
+        radial-gradient(ellipse 10px 5px at 50% 30%, rgba(255,240,180,0.85) 0%, transparent 100%),
+        radial-gradient(ellipse 10px 5px at 68% 45%, rgba(255,240,180,0.85) 0%, transparent 100%),
+        radial-gradient(ellipse  8px 4px at 42% 65%, rgba(255,240,180,0.85) 0%, transparent 100%),
+        radial-gradient(ellipse  8px 4px at 58% 60%, rgba(255,240,180,0.85) 0%, transparent 100%);
+    }
+    /* Whole wheat bun style */
+    .bun-top.wheat .ing-inner {
+      background: radial-gradient(ellipse 70% 60% at 50% 30%, #c8955a 0%, #a06530 50%, #7a4515 100%);
+      border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+    }
+
+    /* ---- BOTTOM BUN ---- */
+    .bun-bottom .ing-inner {
+      background:
+        linear-gradient(to bottom, #e8a840 0%, #c97b2a 40%, #a85c1a 100%);
+      border-radius: 0 0 50% 50% / 0 0 40% 40%;
+    }
+    .bun-bottom.wheat .ing-inner {
+      background: linear-gradient(to bottom, #c8955a 0%, #a06530 40%, #7a4515 100%);
+      border-radius: 0 0 50% 50% / 0 0 40% 40%;
+    }
+
+    /* ---- LETTUCE ---- */
+    .band-lettuce .ing-inner {
+      background:
+        radial-gradient(ellipse 120% 100% at 10% 50%,  #5cb85c 0%, transparent 60%),
+        radial-gradient(ellipse 120% 100% at 35% 30%,  #4CAF50 0%, transparent 55%),
+        radial-gradient(ellipse 120% 100% at 60% 70%,  #66bb6a 0%, transparent 55%),
+        radial-gradient(ellipse 120% 100% at 85% 40%,  #43A047 0%, transparent 60%),
+        #388E3C;
+      position: relative;
+    }
+    /* Wavy edge at top */
+    .band-lettuce .ing-inner::before {
+      content:''; position:absolute; top:0; left:-10px; right:-10px; height:20px;
+      background: radial-gradient(circle 18px at 10% 0%, #f5f5f5 50%, transparent 50%),
+                  radial-gradient(circle 18px at 25% 0%, #f5f5f5 50%, transparent 50%),
+                  radial-gradient(circle 18px at 40% 0%, #f5f5f5 50%, transparent 50%),
+                  radial-gradient(circle 18px at 55% 0%, #f5f5f5 50%, transparent 50%),
+                  radial-gradient(circle 18px at 70% 0%, #f5f5f5 50%, transparent 50%),
+                  radial-gradient(circle 18px at 85% 0%, #f5f5f5 50%, transparent 50%),
+                  radial-gradient(circle 18px at 100%  0%, #f5f5f5 50%, transparent 50%);
+    }
+
+    /* ---- TOMATO ---- */
+    .band-tomato .ing-inner {
+      background:
+        radial-gradient(ellipse 25% 80% at 15% 50%, #e74c3c 0%, #c0392b 60%, transparent 80%),
+        radial-gradient(ellipse 25% 80% at 38% 50%, #e74c3c 0%, #c0392b 60%, transparent 80%),
+        radial-gradient(ellipse 25% 80% at 62% 50%, #e74c3c 0%, #c0392b 60%, transparent 80%),
+        radial-gradient(ellipse 25% 80% at 85% 50%, #e74c3c 0%, #c0392b 60%, transparent 80%),
+        #b03020;
+      position: relative;
+    }
+    /* Seed lines between slices */
+    .band-tomato .ing-inner::before {
+      content:''; position:absolute; inset:0;
+      background:
+        linear-gradient(to right, transparent 24%, rgba(0,0,0,0.18) 24.5%, transparent 25%),
+        linear-gradient(to right, transparent 49%, rgba(0,0,0,0.18) 49.5%, transparent 50%),
+        linear-gradient(to right, transparent 74%, rgba(0,0,0,0.18) 74.5%, transparent 75%);
+    }
+
+    /* ---- CHEESE ---- */
+    .band-cheese .ing-inner {
+      background: linear-gradient(to bottom, #ffe066 0%, #ffd633 50%, #e8c020 100%);
+      position: relative;
+    }
+    /* Melted drip effect */
+    .band-cheese .ing-inner::after {
+      content:''; position:absolute; bottom:-10px; left:0; right:0; height:20px;
+      background:
+        radial-gradient(ellipse 14px 14px at 15% 0%, #ffd633 50%, transparent 51%),
+        radial-gradient(ellipse 12px 12px at 30% 0%, #ffd633 50%, transparent 51%),
+        radial-gradient(ellipse 16px 16px at 48% 0%, #ffd633 50%, transparent 51%),
+        radial-gradient(ellipse 12px 12px at 65% 0%, #ffd633 50%, transparent 51%),
+        radial-gradient(ellipse 14px 14px at 80% 0%, #ffd633 50%, transparent 51%),
+        radial-gradient(ellipse 10px 10px at 93% 0%, #ffd633 50%, transparent 51%);
+    }
+
+    /* ---- CHICKEN ---- */
+    .band-chicken .ing-inner {
+      background:
+        linear-gradient(135deg, #d4943a 0%, #c07830 25%, #e8a848 50%, #b86820 75%, #d4943a 100%);
+      position: relative;
+    }
+    /* Grill marks */
+    .band-chicken .ing-inner::before {
+      content:''; position:absolute; inset:0;
+      background:
+        repeating-linear-gradient(
+          -30deg,
+          transparent 0px, transparent 14px,
+          rgba(80,40,10,0.3) 14px, rgba(80,40,10,0.3) 18px
+        );
+    }
+
+    /* ---- BACON ---- */
+    .band-bacon .ing-inner {
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #8B1A1A 0px, #8B1A1A 20px,
+          #f5c8a0 20px, #f5c8a0 35px,
+          #8B1A1A 35px, #8B1A1A 55px,
+          #f5c8a0 55px, #f5c8a0 68px,
+          #8B1A1A 68px, #8B1A1A 88px,
+          #f5c8a0 88px, #f5c8a0 100px,
+          #8B1A1A 100px, #8B1A1A 440px
+        );
+      position: relative;
+    }
+    /* Sizzle sheen */
+    .band-bacon .ing-inner::after {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(to bottom, rgba(255,200,100,0.25) 0%, transparent 50%, rgba(0,0,0,0.15) 100%);
+    }
+
+    /* ---- AVOCADO ---- */
+    .band-avocado .ing-inner {
+      background:
+        radial-gradient(ellipse 20% 80% at 12% 50%,  #8BC34A 0%, #6d9e2e 60%, transparent 80%),
+        radial-gradient(ellipse 20% 80% at 30% 50%,  #9CCC65 0%, #7aad42 60%, transparent 80%),
+        radial-gradient(ellipse 20% 80% at 50% 50%,  #8BC34A 0%, #6d9e2e 60%, transparent 80%),
+        radial-gradient(ellipse 20% 80% at 70% 50%,  #9CCC65 0%, #7aad42 60%, transparent 80%),
+        radial-gradient(ellipse 20% 80% at 88% 50%,  #8BC34A 0%, #6d9e2e 60%, transparent 80%),
+        #558B2F;
+    }
+
+    /* Price badge */
+    .price-badge { background:#1e272e; color:#f7b731; padding:13px 32px; border-radius:25px; font-size:21px; font-weight:700; display:flex; align-items:center; gap:10px; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+
+    /* PANEL */
+    .panel { background:#1e272e; border-radius:24px; padding:35px 30px; color:white; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
+    .panel h3 { font-family:'Pacifico',cursive; font-size:26px; color:#f7b731; margin-bottom:8px; }
+    .panel .subtitle { font-size:12px; opacity:0.6; margin-bottom:20px; }
+
+    .bread-selector { display:flex; gap:10px; margin-bottom:25px; }
+    .bread-opt { flex:1; background:rgba(255,255,255,0.07); border:2px solid transparent; border-radius:12px; padding:12px 6px; cursor:pointer; color:white; text-align:center; font-size:12px; font-weight:500; transition:all 0.3s; }
+    .bread-opt:hover { border-color:rgba(247,183,49,0.5); }
+    .bread-opt.active { border-color:#f7b731; background:rgba(247,183,49,0.15); }
+    .bread-opt .be { font-size:24px; display:block; margin-bottom:4px; }
+
+    .section-label { font-size:12px; text-transform:uppercase; letter-spacing:1px; opacity:0.5; margin-bottom:12px; font-weight:600; }
+
+    .fillings-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+    .filling-btn { background:rgba(255,255,255,0.07); border:2px solid transparent; border-radius:14px; padding:14px 8px; cursor:pointer; color:white; display:flex; flex-direction:column; align-items:center; gap:6px; transition:all 0.3s; position:relative; }
+    .filling-btn:hover { background:rgba(247,183,49,0.15); border-color:#f7b731; transform:translateY(-3px); }
+    .filling-btn.active { background:rgba(247,183,49,0.2); border-color:#f7b731; }
+    .filling-btn .check { position:absolute; top:7px; right:7px; width:16px; height:16px; background:#f7b731; border-radius:50%; display:none; align-items:center; justify-content:center; font-size:9px; color:#1e272e; }
+    .filling-btn.active .check { display:flex; }
+    .f-icon { font-size:28px; transition:transform 0.3s; }
+    .filling-btn:hover .f-icon { transform:scale(1.2) rotate(8deg); }
+    .filling-name { font-size:12px; font-weight:500; }
+    .filling-price { font-size:11px; color:#f7b731; }
+
+    .counter-row { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.07); border-radius:12px; padding:12px 16px; margin-bottom:18px; }
+    .counter-row span { font-size:14px; opacity:0.8; }
+    .counter-badge { background:#f7b731; color:#1e272e; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+
+    .controls { display:flex; gap:10px; }
+    .reset-btn { flex:1; background:transparent; border:2px solid #f7b731; color:#f7b731; padding:13px; border-radius:25px; font-weight:600; cursor:pointer; transition:all 0.3s; font-size:13px; }
+    .reset-btn:hover { background:#f7b731; color:#1e272e; }
+    .cart-add-btn { flex:2; background:#f7b731; border:none; color:#1e272e; padding:13px; border-radius:25px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .cart-add-btn:hover { background:#ffcc4d; }
+
+    .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:2000; }
+    .popup-box { width:420px; background:#1e272e; color:white; padding:30px; border-radius:20px; animation:pop 0.35s ease; }
+    @keyframes pop{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+    .popup-box h2 { font-family:'Pacifico',cursive; margin-bottom:20px; color:#f7b731; }
+    .popup-box input { width:100%; margin:8px 0; padding:12px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white; font-size:14px; }
+    .popup-box input::placeholder { color:rgba(255,255,255,0.5); }
+    .cart-items { max-height:160px; overflow-y:auto; margin-bottom:15px; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:10px; margin-bottom:8px; font-size:14px; }
+    .cart-item button { background:#e74c3c; border:none; color:white; padding:4px 10px; border-radius:8px; cursor:pointer; }
+    .total-text { font-size:18px; font-weight:600; margin:10px 0; }
+    .checkout-btn { width:100%; background:#f7b731; border:none; padding:14px; border-radius:25px; font-weight:700; cursor:pointer; margin-top:10px; font-size:15px; }
+    .close-btn { width:100%; background:transparent; border:2px solid #f7b731; padding:12px; border-radius:25px; color:#f7b731; cursor:pointer; margin-top:10px; font-weight:600; }
+
+    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e272e; color:#f7b731; padding:14px 28px; border-radius:25px; font-weight:600; font-size:15px; box-shadow:0 10px 30px rgba(0,0,0,0.4); border:1px solid rgba(247,183,49,0.3); transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); z-index:9999; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+
+    @media(max-width:768px){ .navbar{padding:18px 20px;} .sandwich-wrap{width:310px;} .panel{width:290px;} }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Feane</div>
+    <nav>
+      <a href="home.html">HOME</a>
+      <a href="menu.html">MENU</a>
+      <a href="about.html">ABOUT</a>
+    </nav>
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <div class="builder">
+    <div style="text-align:center">
+      <a href="food-select.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Food Selection</a>
+    </div>
+    <div class="builder-header">
+      <h1>Build Your Sandwich 🥪</h1>
+      <p>Layer up your perfect sandwich, one ingredient at a time</p>
+    </div>
+
+    <div class="builder-layout">
+
+      <!-- SANDWICH -->
+      <div class="sandwich-stage">
+        <div class="sandwich-wrap" id="sandwichWrap">
+
+          <!-- TOP BUN — always visible -->
+          <div class="ing-band bun bun-top" id="band-bun-top">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- LETTUCE -->
+          <div class="ing-band band-lettuce" id="band-lettuce">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- TOMATO -->
+          <div class="ing-band band-tomato" id="band-tomato">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- CHEESE -->
+          <div class="ing-band band-cheese" id="band-cheese">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- CHICKEN -->
+          <div class="ing-band band-chicken" id="band-chicken">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- BACON -->
+          <div class="ing-band band-bacon" id="band-bacon">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- AVOCADO -->
+          <div class="ing-band band-avocado" id="band-avocado">
+            <div class="ing-inner"></div>
+          </div>
+
+          <!-- BOTTOM BUN — always visible -->
+          <div class="ing-band bun bun-bottom" id="band-bun-bottom">
+            <div class="ing-inner"></div>
+          </div>
+
+        </div>
+
+        <div class="price-badge">
+          <i class="fa-solid fa-tag"></i> Total: $<span id="sandwichPrice">12</span>
+        </div>
+      </div>
+
+      <!-- PANEL -->
+      <div class="panel">
+        <h3>Build It</h3>
+        <p class="subtitle">Choose your bread and fillings</p>
+
+        <p class="section-label">Bread Type</p>
+        <div class="bread-selector">
+          <div class="bread-opt active" id="bread-white" onclick="selectBread('white')">
+            <span class="be">🍞</span>White
+          </div>
+          <div class="bread-opt" id="bread-whole" onclick="selectBread('whole')">
+            <span class="be">🌾</span>Whole
+          </div>
+          <div class="bread-opt" id="bread-sesame" onclick="selectBread('sesame')">
+            <span class="be">🫓</span>Sesame
+          </div>
+        </div>
+
+        <p class="section-label">Fillings</p>
+        <div class="fillings-grid">
+
+          <button class="filling-btn" id="btn-lettuce" onclick="toggleFilling('lettuce')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="f-icon">🥬</span>
+            <span class="filling-name">Lettuce</span>
+            <span class="filling-price">+$1</span>
+          </button>
+
+          <button class="filling-btn" id="btn-tomato" onclick="toggleFilling('tomato')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="f-icon">🍅</span>
+            <span class="filling-name">Tomato</span>
+            <span class="filling-price">+$1</span>
+          </button>
+
+          <button class="filling-btn" id="btn-cheese" onclick="toggleFilling('cheese')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="f-icon">🧀</span>
+            <span class="filling-name">Cheese</span>
+            <span class="filling-price">+$2</span>
+          </button>
+
+          <button class="filling-btn" id="btn-chicken" onclick="toggleFilling('chicken')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="f-icon">🍗</span>
+            <span class="filling-name">Chicken</span>
+            <span class="filling-price">+$4</span>
+          </button>
+
+          <button class="filling-btn" id="btn-bacon" onclick="toggleFilling('bacon')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="f-icon">🥓</span>
+            <span class="filling-name">Bacon</span>
+            <span class="filling-price">+$3</span>
+          </button>
+
+          <button class="filling-btn" id="btn-avocado" onclick="toggleFilling('avocado')">
+            <span class="check"><i class="fa-solid fa-check"></i></span>
+            <span class="f-icon">🥑</span>
+            <span class="filling-name">Avocado</span>
+            <span class="filling-price">+$2</span>
+          </button>
+
+        </div>
+
+        <div class="counter-row">
+          <span>Fillings selected</span>
+          <span class="counter-badge" id="fillingCount">0</span>
+        </div>
+        <div class="controls">
+          <button class="reset-btn" onclick="resetSandwich()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button class="cart-add-btn" onclick="addToCart()"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="cartPopup">
+    <div class="popup-box">
+      <h2>Your Cart 🛒</h2>
+      <div class="cart-items" id="cartItems"></div>
+      <p class="total-text">Total: $<span id="cartTotal">0</span></p>
+      <button class="checkout-btn" onclick="checkout()">Checkout ✅</button>
+      <button class="close-btn" id="closeCart">Close</button>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="registerPopup">
+    <div class="popup-box">
+      <h2>Register 👤</h2>
+      <input type="text" id="regName" placeholder="Full Name">
+      <input type="email" id="regEmail" placeholder="Email">
+      <input type="password" id="regPass" placeholder="Password">
+      <button class="checkout-btn" onclick="register()">Register</button>
+      <button class="close-btn" id="closeRegister">Close</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const PRICES = { lettuce:1, tomato:1, cheese:2, chicken:4, bacon:3, avocado:2 };
+    let activeFillings={}, currentBread='white', cart=[];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('loaded');
+      document.getElementById('openCart').addEventListener('click', ()=>{document.getElementById('cartPopup').style.display='flex';renderCart();});
+      document.getElementById('closeCart').addEventListener('click', ()=>{document.getElementById('cartPopup').style.display='none';});
+      document.getElementById('openRegister').addEventListener('click', ()=>{document.getElementById('registerPopup').style.display='flex';});
+      document.getElementById('closeRegister').addEventListener('click', ()=>{document.getElementById('registerPopup').style.display='none';});
+    });
+
+    function selectBread(type) {
+      currentBread=type;
+      ['white','whole','sesame'].forEach(b=>document.getElementById('bread-'+b).classList.remove('active'));
+      document.getElementById('bread-'+type).classList.add('active');
+      // Switch bun appearance
+      const topBun    = document.getElementById('band-bun-top');
+      const bottomBun = document.getElementById('band-bun-bottom');
+      if(type==='whole'){
+        topBun.classList.add('wheat'); bottomBun.classList.add('wheat');
+      } else {
+        topBun.classList.remove('wheat'); bottomBun.classList.remove('wheat');
+      }
+      if(type==='sesame'){
+        topBun.style.setProperty('--seed','visible');
+      }
+    }
+
+    function toggleFilling(name) {
+      const band = document.getElementById('band-'+name);
+      const btn  = document.getElementById('btn-'+name);
+      if(activeFillings[name]){
+        activeFillings[name]=false; btn.classList.remove('active'); band.classList.remove('show');
+      } else {
+        activeFillings[name]=true; btn.classList.add('active'); band.classList.add('show');
+        const wrap=document.getElementById('sandwichWrap');
+        wrap.style.transform='scale(1.04)';
+        setTimeout(()=>wrap.style.transform='',350);
+      }
+      updateUI();
+    }
+
+    function updateUI(){
+      const count=Object.values(activeFillings).filter(Boolean).length;
+      document.getElementById('fillingCount').textContent=count;
+      const extras=Object.entries(activeFillings).filter(([,v])=>v).reduce((s,[k])=>s+(PRICES[k]||0),0);
+      document.getElementById('sandwichPrice').textContent=12+extras;
+    }
+
+    function resetSandwich(){
+      Object.keys(activeFillings).forEach(n=>{
+        activeFillings[n]=false;
+        const b=document.getElementById('band-'+n); if(b)b.classList.remove('show');
+        const btn=document.getElementById('btn-'+n); if(btn)btn.classList.remove('active');
+      });
+      updateUI(); showToast('🥪 Sandwich reset!');
+    }
+
+    function addToCart(){
+      const sel=Object.entries(activeFillings).filter(([,v])=>v).map(([k])=>k);
+      if(!sel.length){showToast('⚠️ Add at least one filling!');return;}
+      const price=12+sel.reduce((s,k)=>s+(PRICES[k]||0),0);
+      const names=sel.map(t=>t[0].toUpperCase()+t.slice(1)).join(', ');
+      cart.push({name:`${currentBread[0].toUpperCase()+currentBread.slice(1)} Sandwich (${names})`,price});
+      showToast(`✅ Sandwich added! $${price}`);
+    }
+
+    function renderCart(){
+      const el=document.getElementById('cartItems'),tot=document.getElementById('cartTotal');
+      el.innerHTML=''; let sum=0;
+      cart.forEach((item,i)=>{sum+=item.price;el.innerHTML+=`<div class="cart-item"><span>${item.name} - $${item.price}</span><button onclick="removeItem(${i})">X</button></div>`;});
+      tot.textContent=sum;
+    }
+    function removeItem(i){cart.splice(i,1);renderCart();}
+    function checkout(){if(!cart.length){showToast('🛒 Cart is empty!');return;}showToast(`✅ Order placed! $${cart.reduce((s,i)=>s+i.price,0)}`);cart=[];renderCart();document.getElementById('cartPopup').style.display='none';}
+    function register(){const n=document.getElementById('regName').value,e=document.getElementById('regEmail').value,p=document.getElementById('regPass').value;if(!n||!e||!p){showToast('⚠️ Fill all fields!');return;}showToast(`🎉 Welcome ${n}!`);['regName','regEmail','regPass'].forEach(id=>document.getElementById(id).value='');document.getElementById('registerPopup').style.display='none';}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+    window.toggleFilling=toggleFilling;window.selectBread=selectBread;window.resetSandwich=resetSandwich;window.addToCart=addToCart;window.removeItem=removeItem;window.checkout=checkout;window.register=register;
+  </script>
+</body>
+</html>

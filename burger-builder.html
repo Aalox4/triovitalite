@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feane - Build Your Burger</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { background:#f5f5f5; opacity:0; transition:opacity 0.6s ease; padding-top:90px; }
+    body.loaded { opacity:1; }
+
+    .navbar { position:fixed; top:0; width:100%; padding:18px 60px; background:rgba(0,0,0,0.82); backdrop-filter:blur(10px); display:flex; justify-content:space-between; align-items:center; z-index:1000; }
+    .logo { font-family:'Pacifico',cursive; font-size:26px; color:white; }
+    nav a { color:white; text-decoration:none; margin:0 15px; font-size:14px; font-weight:500; transition:0.3s; }
+    nav a:hover { color:#f7b731; }
+    .nav-icons { display:flex; align-items:center; gap:15px; }
+    .nav-icons i { color:white; cursor:pointer; font-size:18px; transition:0.3s; }
+    .nav-icons i:hover { color:#f7b731; }
+    .order-btn { background:#f7b731; border:none; padding:10px 18px; border-radius:25px; cursor:pointer; font-weight:600; }
+
+    .builder { padding:60px 40px; min-height:100vh; }
+    .builder-header { text-align:center; margin-bottom:50px; }
+    .builder-header h1 { font-family:'Pacifico',cursive; font-size:50px; color:#1e272e; margin-bottom:10px; }
+    .builder-header p { color:#888; font-size:16px; }
+    .back-link { display:inline-flex; align-items:center; gap:8px; color:#f7b731; text-decoration:none; font-weight:600; font-size:14px; margin-bottom:20px; transition:0.3s; }
+    .back-link:hover { gap:14px; }
+
+    .builder-layout { display:flex; justify-content:center; align-items:flex-start; gap:70px; flex-wrap:wrap; max-width:1100px; margin:0 auto; }
+    .burger-stage { display:flex; flex-direction:column; align-items:center; gap:22px; }
+
+    /* ======= BURGER STACK ======= */
+    .burger-wrap {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 0 0 6px #f7b731, 0 0 0 10px rgba(247,183,49,0.2), 0 30px 70px rgba(0,0,0,0.3);
+      transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .burger-wrap:hover { transform:scale(1.02); }
+
+    /* Ingredient bands */
+    .b-band { width:100%; overflow:hidden; max-height:0; transition:max-height 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    .b-band.show { max-height:80px; }
+    .b-band.bun-t { max-height:100px; }
+    .b-band.bun-b { max-height:70px; }
+    .b-inner { width:100%; height:80px; position:relative; overflow:hidden; }
+    .bun-t .b-inner { height:100px; }
+    .bun-b .b-inner { height:70px; }
+
+    /* TOP BUN */
+    .bun-t .b-inner {
+      background: radial-gradient(ellipse 80% 70% at 50% 25%, #f5c060 0%, #e09030 40%, #c07020 75%, #9a5515 100%);
+      border-radius: 50% 50% 0 0 / 65% 65% 0 0;
+    }
+    /* Sesame seeds */
+    .bun-t .b-inner::after {
+      content:''; position:absolute; top:20px; left:0; right:0; height:35px;
+      background:
+        radial-gradient(ellipse 11px 5px at 28% 40%, rgba(255,245,190,0.9) 0%, transparent 100%),
+        radial-gradient(ellipse 11px 5px at 48% 28%, rgba(255,245,190,0.9) 0%, transparent 100%),
+        radial-gradient(ellipse 11px 5px at 66% 48%, rgba(255,245,190,0.9) 0%, transparent 100%),
+        radial-gradient(ellipse  9px 4px at 38% 68%, rgba(255,245,190,0.9) 0%, transparent 100%),
+        radial-gradient(ellipse  9px 4px at 57% 65%, rgba(255,245,190,0.9) 0%, transparent 100%);
+    }
+    /* BOTTOM BUN */
+    .bun-b .b-inner {
+      background: linear-gradient(to bottom, #e09030 0%, #c07020 50%, #a05510 100%);
+      border-radius: 0 0 50% 50% / 0 0 45% 45%;
+    }
+
+    /* PATTY */
+    .band-patty .b-inner {
+      height: 55px;
+      background:
+        linear-gradient(to bottom,
+          #3d1a0a 0%, #5a2810 8%,
+          #7a3a18 15%, #5a2810 40%,
+          #6a3015 60%, #4a2008 80%,
+          #3a1808 100%);
+      position:relative;
+    }
+    .band-patty .b-inner::before {
+      content:''; position:absolute; inset:0;
+      background: repeating-linear-gradient(90deg,
+        transparent 0px, transparent 18px,
+        rgba(20,8,0,0.35) 18px, rgba(20,8,0,0.35) 22px);
+    }
+    /* Sear lines */
+    .band-patty .b-inner::after {
+      content:''; position:absolute; inset:0;
+      background: repeating-linear-gradient(-15deg,
+        transparent 0px, transparent 10px,
+        rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 13px);
+    }
+
+    /* DOUBLE PATTY (extra layer, same style) */
+    .band-double .b-inner {
+      height: 55px;
+      background: linear-gradient(to bottom, #3d1a0a 0%, #5a2810 10%, #7a3a18 18%, #5a2810 45%, #4a2008 100%);
+      position:relative;
+    }
+    .band-double .b-inner::before {
+      content:''; position:absolute; inset:0;
+      background: repeating-linear-gradient(90deg, transparent 0px, transparent 18px, rgba(20,8,0,0.35) 18px, rgba(20,8,0,0.35) 22px);
+    }
+
+    /* CHEESE */
+    .band-cheese .b-inner {
+      height: 22px;
+      background: linear-gradient(to bottom, #ffe066 0%, #ffd020 60%, #e8b800 100%);
+      position:relative;
+    }
+    .band-cheese .b-inner::after {
+      content:''; position:absolute; bottom:-10px; left:0; right:0; height:14px;
+      background:
+        radial-gradient(ellipse 16px 14px at 10% 0%, #ffd020 50%, transparent 51%),
+        radial-gradient(ellipse 14px 14px at 25% 0%, #ffd020 50%, transparent 51%),
+        radial-gradient(ellipse 16px 14px at 42% 0%, #ffd020 50%, transparent 51%),
+        radial-gradient(ellipse 14px 14px at 58% 0%, #ffd020 50%, transparent 51%),
+        radial-gradient(ellipse 16px 14px at 74% 0%, #ffd020 50%, transparent 51%),
+        radial-gradient(ellipse 12px 12px at 90% 0%, #ffd020 50%, transparent 51%);
+      z-index:2;
+    }
+
+    /* LETTUCE */
+    .band-lettuce .b-inner {
+      height: 30px;
+      background:
+        radial-gradient(ellipse 110% 100% at 5%  50%, #5cb85c 0%, transparent 55%),
+        radial-gradient(ellipse 110% 100% at 28% 30%, #4CAF50 0%, transparent 55%),
+        radial-gradient(ellipse 110% 100% at 52% 70%, #66bb6a 0%, transparent 55%),
+        radial-gradient(ellipse 110% 100% at 78% 35%, #43A047 0%, transparent 55%),
+        radial-gradient(ellipse 110% 100% at 98% 60%, #56ab57 0%, transparent 55%),
+        #388E3C;
+      position:relative;
+    }
+    .band-lettuce .b-inner::before {
+      content:''; position:absolute; top:0; left:-5px; right:-5px; height:18px;
+      background:
+        radial-gradient(circle 14px at 8%   0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 20%  0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 33%  0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 46%  0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 59%  0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 72%  0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 85%  0%, #f5f5f5 50%, transparent 50%),
+        radial-gradient(circle 14px at 98%  0%, #f5f5f5 50%, transparent 50%);
+    }
+
+    /* TOMATO */
+    .band-tomato .b-inner {
+      height: 28px;
+      background:
+        radial-gradient(ellipse 22% 80% at 12% 50%, #e74c3c 0%, #c0392b 65%, transparent 80%),
+        radial-gradient(ellipse 22% 80% at 34% 50%, #e74c3c 0%, #c0392b 65%, transparent 80%),
+        radial-gradient(ellipse 22% 80% at 56% 50%, #e74c3c 0%, #c0392b 65%, transparent 80%),
+        radial-gradient(ellipse 22% 80% at 78% 50%, #e74c3c 0%, #c0392b 65%, transparent 80%),
+        radial-gradient(ellipse 22% 80% at 98% 50%, #e74c3c 0%, #c0392b 65%, transparent 80%),
+        #962d22;
+      position:relative;
+    }
+    .band-tomato .b-inner::before {
+      content:''; position:absolute; inset:0;
+      background:
+        linear-gradient(to right, transparent 22%, rgba(0,0,0,0.15) 22.5%, transparent 23%),
+        linear-gradient(to right, transparent 44%, rgba(0,0,0,0.15) 44.5%, transparent 45%),
+        linear-gradient(to right, transparent 67%, rgba(0,0,0,0.15) 67.5%, transparent 68%),
+        linear-gradient(to right, transparent 89%, rgba(0,0,0,0.15) 89.5%, transparent 90%);
+    }
+
+    /* BACON */
+    .band-bacon .b-inner {
+      height: 28px;
+      background: repeating-linear-gradient(90deg,
+        #7a1010 0px,  #7a1010 18px,
+        #f0c090 18px, #f0c090 30px,
+        #7a1010 30px, #7a1010 48px,
+        #f0c090 48px, #f0c090 60px,
+        #7a1010 60px, #7a1010 78px,
+        #f0c090 78px, #f0c090 90px,
+        #7a1010 90px, #7a1010 400px);
+      position:relative;
+    }
+    .band-bacon .b-inner::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(255,180,80,0.2) 0%, transparent 50%, rgba(0,0,0,0.12) 100%);
+    }
+
+    /* ONION RINGS */
+    .band-onion .b-inner {
+      height: 28px;
+      background:
+        radial-gradient(ellipse 18% 75% at 10% 50%, transparent 55%, rgba(200,150,220,0.8) 56%, rgba(200,150,220,0.8) 70%, transparent 71%),
+        radial-gradient(ellipse 18% 75% at 28% 50%, transparent 55%, rgba(220,170,240,0.75) 56%, rgba(220,170,240,0.75) 70%, transparent 71%),
+        radial-gradient(ellipse 18% 75% at 46% 50%, transparent 55%, rgba(200,150,220,0.8) 56%, rgba(200,150,220,0.8) 70%, transparent 71%),
+        radial-gradient(ellipse 18% 75% at 64% 50%, transparent 55%, rgba(220,170,240,0.75) 56%, rgba(220,170,240,0.75) 70%, transparent 71%),
+        radial-gradient(ellipse 18% 75% at 82% 50%, transparent 55%, rgba(200,150,220,0.8) 56%, rgba(200,150,220,0.8) 70%, transparent 71%),
+        rgba(0,0,0,0.05);
+    }
+
+    /* PICKLES */
+    .band-pickle .b-inner {
+      height: 18px;
+      background: repeating-linear-gradient(90deg,
+        #5d8a3c 0px, #5d8a3c 35px,
+        #4a7030 35px, #4a7030 38px,
+        #5d8a3c 38px, #5d8a3c 73px,
+        #4a7030 73px, #4a7030 76px,
+        #5d8a3c 76px, #5d8a3c 400px);
+      position:relative;
+    }
+    .band-pickle .b-inner::after {
+      content:''; position:absolute; inset:0;
+      background: repeating-linear-gradient(90deg,
+        transparent 0px, transparent 6px,
+        rgba(255,255,255,0.12) 6px, rgba(255,255,255,0.12) 7px);
+    }
+
+    /* SAUCE */
+    .band-sauce .b-inner {
+      height: 14px;
+      background: linear-gradient(to right,
+        #d4380a, #e84010, #f05020, #e84010, #d4380a,
+        #f5c000, #e8b000, #f5c000, #d4a000, #f5c000);
+      background-size:200% 100%;
+      animation: sauceFlow 3s linear infinite;
+      position:relative;
+    }
+    @keyframes sauceFlow { 0%{background-position:0%} 100%{background-position:200%} }
+    .band-sauce .b-inner::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, transparent 100%);
+    }
+
+    /* Price badge */
+    .price-badge { background:#1e272e; color:#f7b731; padding:13px 32px; border-radius:25px; font-size:21px; font-weight:700; display:flex; align-items:center; gap:10px; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+
+    /* PANEL */
+    .panel { background:#1e272e; border-radius:24px; padding:35px 30px; color:white; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
+    .panel h3 { font-family:'Pacifico',cursive; font-size:26px; color:#f7b731; margin-bottom:25px; }
+    .toppings-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:25px; }
+    .topping-btn { background:rgba(255,255,255,0.07); border:2px solid transparent; border-radius:16px; padding:16px 8px; cursor:pointer; color:white; display:flex; flex-direction:column; align-items:center; gap:7px; transition:all 0.3s ease; position:relative; }
+    .topping-btn:hover { background:rgba(247,183,49,0.15); border-color:#f7b731; transform:translateY(-4px); }
+    .topping-btn.active { background:rgba(247,183,49,0.22); border-color:#f7b731; }
+    .topping-btn .check { position:absolute; top:8px; right:8px; width:18px; height:18px; background:#f7b731; border-radius:50%; display:none; align-items:center; justify-content:center; font-size:10px; color:#1e272e; }
+    .topping-btn.active .check { display:flex; }
+    .t-icon { font-size:34px; line-height:1; transition:transform 0.3s; }
+    .topping-btn:hover .t-icon { transform:scale(1.2) rotate(8deg); }
+    .topping-name { font-size:13px; font-weight:500; }
+    .topping-price { font-size:11px; color:#f7b731; }
+    .counter-row { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.07); border-radius:12px; padding:12px 16px; margin-bottom:20px; }
+    .counter-row span { font-size:14px; opacity:0.8; }
+    .counter-badge { background:#f7b731; color:#1e272e; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+    .controls { display:flex; gap:10px; }
+    .reset-btn { flex:1; background:transparent; border:2px solid #f7b731; color:#f7b731; padding:13px; border-radius:25px; font-weight:600; cursor:pointer; transition:all 0.3s; font-size:13px; }
+    .reset-btn:hover { background:#f7b731; color:#1e272e; }
+    .cart-add-btn { flex:2; background:#f7b731; border:none; color:#1e272e; padding:13px; border-radius:25px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .cart-add-btn:hover { background:#ffcc4d; }
+
+    .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:2000; }
+    .popup-box { width:420px; background:#1e272e; color:white; padding:30px; border-radius:20px; animation:pop 0.35s ease; }
+    @keyframes pop{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+    .popup-box h2 { font-family:'Pacifico',cursive; margin-bottom:20px; color:#f7b731; }
+    .popup-box input { width:100%; margin:8px 0; padding:12px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white; font-size:14px; }
+    .popup-box input::placeholder { color:rgba(255,255,255,0.5); }
+    .cart-items { max-height:160px; overflow-y:auto; margin-bottom:15px; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:10px; margin-bottom:8px; font-size:14px; }
+    .cart-item button { background:#e74c3c; border:none; color:white; padding:4px 10px; border-radius:8px; cursor:pointer; }
+    .total-text { font-size:18px; font-weight:600; margin:10px 0; }
+    .checkout-btn { width:100%; background:#f7b731; border:none; padding:14px; border-radius:25px; font-weight:700; cursor:pointer; margin-top:10px; font-size:15px; }
+    .close-btn { width:100%; background:transparent; border:2px solid #f7b731; padding:12px; border-radius:25px; color:#f7b731; cursor:pointer; margin-top:10px; font-weight:600; }
+    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e272e; color:#f7b731; padding:14px 28px; border-radius:25px; font-weight:600; font-size:15px; box-shadow:0 10px 30px rgba(0,0,0,0.4); border:1px solid rgba(247,183,49,0.3); transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); z-index:9999; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+
+    @media(max-width:768px){ .navbar{padding:18px 20px;} .burger-wrap{width:300px;} .panel{width:290px;} }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Feane</div>
+    <nav><a href="home.html">HOME</a><a href="menu.html">MENU</a><a href="about.html">ABOUT</a></nav>
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <div class="builder">
+    <div style="text-align:center"><a href="food-select.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Food Selection</a></div>
+    <div class="builder-header">
+      <h1>Build Your Burger 🍔</h1>
+      <p>Stack your ingredients to build the perfect burger</p>
+    </div>
+
+    <div class="builder-layout">
+      <div class="burger-stage">
+        <div class="burger-wrap" id="burgerWrap">
+          <div class="b-band bun-t"><div class="b-inner"></div></div>
+          <div class="b-band band-sauce"  id="band-sauce"><div class="b-inner"></div></div>
+          <div class="b-band band-lettuce" id="band-lettuce"><div class="b-inner"></div></div>
+          <div class="b-band band-tomato"  id="band-tomato"><div class="b-inner"></div></div>
+          <div class="b-band band-onion"   id="band-onion"><div class="b-inner"></div></div>
+          <div class="b-band band-pickle"  id="band-pickle"><div class="b-inner"></div></div>
+          <div class="b-band band-cheese"  id="band-cheese"><div class="b-inner"></div></div>
+          <div class="b-band band-double"  id="band-double"><div class="b-inner"></div></div>
+          <div class="b-band band-patty"   id="band-patty" style="max-height:55px"><div class="b-inner"></div></div>
+          <div class="b-band band-bacon"   id="band-bacon"><div class="b-inner"></div></div>
+          <div class="b-band bun-b"><div class="b-inner"></div></div>
+        </div>
+        <div class="price-badge"><i class="fa-solid fa-tag"></i> Total: $<span id="burgerPrice">12</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Choose Toppings</h3>
+        <div class="toppings-grid">
+          <button class="topping-btn" id="btn-double"   onclick="toggle('double')">  <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🥩</span><span class="topping-name">Double Patty</span><span class="topping-price">+$4</span></button>
+          <button class="topping-btn" id="btn-cheese"   onclick="toggle('cheese')">  <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🧀</span><span class="topping-name">Cheese</span><span class="topping-price">+$2</span></button>
+          <button class="topping-btn" id="btn-bacon"    onclick="toggle('bacon')">   <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🥓</span><span class="topping-name">Bacon</span><span class="topping-price">+$3</span></button>
+          <button class="topping-btn" id="btn-lettuce"  onclick="toggle('lettuce')"> <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🥬</span><span class="topping-name">Lettuce</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-tomato"   onclick="toggle('tomato')">  <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🍅</span><span class="topping-name">Tomato</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-onion"    onclick="toggle('onion')">   <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🧅</span><span class="topping-name">Onion Rings</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-pickle"   onclick="toggle('pickle')">  <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🥒</span><span class="topping-name">Pickles</span><span class="topping-price">+$1</span></button>
+          <button class="topping-btn" id="btn-sauce"    onclick="toggle('sauce')">   <span class="check"><i class="fa-solid fa-check"></i></span><span class="t-icon">🫙</span><span class="topping-name">Special Sauce</span><span class="topping-price">+$1</span></button>
+        </div>
+        <div class="counter-row"><span>Toppings selected</span><span class="counter-badge" id="count">0</span></div>
+        <div class="controls">
+          <button class="reset-btn" onclick="reset()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button class="cart-add-btn" onclick="addToCart()"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="cartPopup"><div class="popup-box"><h2>Your Cart 🛒</h2><div class="cart-items" id="cartItems"></div><p class="total-text">Total: $<span id="cartTotal">0</span></p><button class="checkout-btn" onclick="checkout()">Checkout ✅</button><button class="close-btn" id="closeCart">Close</button></div></div>
+  <div class="popup-overlay" id="registerPopup"><div class="popup-box"><h2>Register 👤</h2><input type="text" id="regName" placeholder="Full Name"><input type="email" id="regEmail" placeholder="Email"><input type="password" id="regPass" placeholder="Password"><button class="checkout-btn" onclick="register()">Register</button><button class="close-btn" id="closeRegister">Close</button></div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const PRICES={double:4,cheese:2,bacon:3,lettuce:1,tomato:1,onion:1,pickle:1,sauce:1};
+    let active={},cart=[];
+    window.addEventListener('DOMContentLoaded',()=>{
+      document.body.classList.add('loaded');
+      document.getElementById('openCart').addEventListener('click',()=>{document.getElementById('cartPopup').style.display='flex';renderCart();});
+      document.getElementById('closeCart').addEventListener('click',()=>{document.getElementById('cartPopup').style.display='none';});
+      document.getElementById('openRegister').addEventListener('click',()=>{document.getElementById('registerPopup').style.display='flex';});
+      document.getElementById('closeRegister').addEventListener('click',()=>{document.getElementById('registerPopup').style.display='none';});
+    });
+    function toggle(name){
+      const band=document.getElementById('band-'+name),btn=document.getElementById('btn-'+name);
+      if(active[name]){active[name]=false;btn.classList.remove('active');band.classList.remove('show');}
+      else{active[name]=true;btn.classList.add('active');band.classList.add('show');const w=document.getElementById('burgerWrap');w.style.transform='scale(1.04)';setTimeout(()=>w.style.transform='',350);}
+      updateUI();
+    }
+    function updateUI(){const c=Object.values(active).filter(Boolean).length;document.getElementById('count').textContent=c;const e=Object.entries(active).filter(([,v])=>v).reduce((s,[k])=>s+(PRICES[k]||0),0);document.getElementById('burgerPrice').textContent=12+e;}
+    function reset(){Object.keys(active).forEach(n=>{active[n]=false;const b=document.getElementById('band-'+n);if(b)b.classList.remove('show');const btn=document.getElementById('btn-'+n);if(btn)btn.classList.remove('active');});updateUI();showToast('🍔 Burger reset!');}
+    function addToCart(){const sel=Object.entries(active).filter(([,v])=>v).map(([k])=>k);if(!sel.length){showToast('⚠️ Add at least one topping!');return;}const price=12+sel.reduce((s,k)=>s+(PRICES[k]||0),0);const names=sel.map(t=>t[0].toUpperCase()+t.slice(1)).join(', ');cart.push({name:`Custom Burger (${names})`,price});showToast(`✅ Burger added! $${price}`);}
+    function renderCart(){const el=document.getElementById('cartItems'),tot=document.getElementById('cartTotal');el.innerHTML='';let sum=0;cart.forEach((item,i)=>{sum+=item.price;el.innerHTML+=`<div class="cart-item"><span>${item.name} - $${item.price}</span><button onclick="removeFromCart(${i})">X</button></div>`;});tot.textContent=sum;}
+    function removeFromCart(i){cart.splice(i,1);renderCart();}
+    function checkout(){if(!cart.length){showToast('🛒 Cart is empty!');return;}showToast(`✅ Order placed! $${cart.reduce((s,i)=>s+i.price,0)}`);cart=[];renderCart();document.getElementById('cartPopup').style.display='none';}
+    function register(){const n=document.getElementById('regName').value,e=document.getElementById('regEmail').value,p=document.getElementById('regPass').value;if(!n||!e||!p){showToast('⚠️ Fill all fields!');return;}showToast(`🎉 Welcome ${n}!`);['regName','regEmail','regPass'].forEach(id=>document.getElementById(id).value='');document.getElementById('registerPopup').style.display='none';}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+    window.toggle=toggle;window.reset=reset;window.addToCart=addToCart;window.removeFromCart=removeFromCart;window.checkout=checkout;window.register=register;
+  </script>
+</body>
+</html>

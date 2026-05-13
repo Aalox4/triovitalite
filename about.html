@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trio Vitalité - About</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+
+
+
+
+
+    .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.4s ease;
+}
+
+/* SHOW POPUP */
+.popup-overlay.active {
+  display: flex;
+}
+
+/* ===== POPUP BOX (GLASS EFFECT) ===== */
+.popup-box {
+  width: 380px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  text-align: center;
+  animation: slideUp 0.5s ease;
+}
+
+/* ===== TITLES ===== */
+.popup-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ===== INPUTS ===== */
+.popup-box input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.popup-box input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.popup-box input:focus {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.02);
+}
+
+/* ===== RADIO BUTTONS ===== */
+.radio-group {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.radio-group label {
+  cursor: pointer;
+}
+
+/* ===== TOTAL TEXT ===== */
+.total-text {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== ORANGE BUTTON (UPDATED 🔥) ===== */
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #f7b731, #ffcc4d);
+  color: #1e272e;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 6px 20px rgba(247,183,49,0.4);
+}
+
+.checkout-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(247,183,49,0.6);
+}
+
+/* ===== CLOSE BUTTON ===== */
+.close-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+
+
+    
+    body {
+      background: #1e272e;
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+      overflow-x: hidden;
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 18px 60px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-family: 'Pacifico', cursive;
+      font-size: 26px;
+      color: white;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #f7b731;
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-icons i {
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    .nav-icons i:hover {
+      color: #f7b731;
+    }
+
+    .order-btn {
+      background: #f7b731;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .order-btn:hover {
+      background: #ffcc4d;
+    }
+
+    /* Main about section */
+
+
+
+
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 0 0 60px; /* No top padding, image goes full screen */
+  background-color: transparent; /* Remove white background */
+}
+
+.about-hero img {
+  width: 100vw;       /* full width of viewport */
+  height: 600px;      /* reduced height */
+  object-fit: cover;  /* image covers container */
+  display: block;
+  margin-left: calc(-50vw + 50%); /* removes container padding if any */
+}
+
+
+.about-hero5 img {
+  width: 100vw;       /* full width of viewport */
+  height: 700px;      /* reduced height */
+  object-fit: cover;  /* image covers container */
+  display: block;
+  margin-left: calc(-50vw + 50%); /* removes container padding if any */
+}
+
+
+
+.about-text {
+  max-width: 900px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #ffffff;
+}
+
+.about-text h2 {
+  font-size: 2.5rem;
+  color: #ff6600;
+}
+
+.about-text p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.hero-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ff6600, #ff9933);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255,102,0,0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-text h2 {
+    font-size: 2rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+    .about-section {
+      padding: 140px 60px 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 80px;
+      color: white;
+      flex-wrap: wrap;
+    }
+
+    .about-img img {
+      width: 400px;
+      border-radius: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      border: 3px solid rgba(247, 183, 49, 0.3);
+    }
+
+    .about-text {
+      max-width: 500px;
+    }
+
+    .about-text h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: 45px;
+      margin-bottom: 20px;
+      color: #f7b731;
+    }
+
+    .about-text p {
+      margin-bottom: 15px;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .hero-btn {
+      background: #f7b731;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .hero-btn:hover {
+      background: #ffcc4d;
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: 'Pacifico', cursive;
+      font-size: 40px;
+      color: #f7b731;
+      margin-bottom: 50px;
+    }
+
+    /* Photo Gallery */
+    .gallery-section {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 60px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 30px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      border: 3px solid rgba(247, 183, 49, 0.2);
+      transition: 0.3s;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05);
+      border-color: #f7b731;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Story cards */
+    .story-container {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 60px;
+    }
+
+    .story-grid {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .story-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(247, 183, 49, 0.2);
+      border-radius: 30px;
+      padding: 40px 30px;
+      width: 300px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .story-card:hover {
+      transform: translateY(-10px);
+      border-color: #f7b731;
+      background: rgba(247, 183, 49, 0.05);
+    }
+
+    .story-icon {
+      font-size: 50px;
+      color: #f7b731;
+      margin-bottom: 20px;
+    }
+
+    .story-card h3 {
+      color: white;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .story-card p {
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    /* Values section */
+    .values-section {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 80px 60px;
+      margin: 60px 0;
+    }
+
+    .values-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .value-item {
+      text-align: center;
+      width: 250px;
+    }
+
+    .value-item i {
+      font-size: 60px;
+      color: #f7b731;
+      margin-bottom: 20px;
+    }
+
+    .value-item h4 {
+      color: white;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .value-item p {
+      color: #aaa;
+    }
+
+    /* Stats section with background image */
+    .stats-section {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/stats-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      padding: 80px 60px;
+      margin: 60px 0;
+    }
+
+    .stats-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: #f7b731;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      opacity: 0.8;
+    }
+
+    /* Team section */
+    .team-section {
+      max-width: 1200px;
+      margin: 100px auto;
+      padding: 0 60px;
+    }
+
+    .team-grid {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .team-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 30px;
+      padding: 40px 30px;
+      width: 280px;
+      text-align: center;
+      border: 1px solid rgba(247, 183, 49, 0.1);
+    }
+
+    .team-avatar {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 25px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #f7b731;
+    }
+
+    .team-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-card h3 {
+      color: white;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .team-role {
+      color: #f7b731;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .team-card p {
+      color: #aaa;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ===== COOL MOVING COMMENTS SECTION ===== */
+    .comments-section {
+      padding: 80px 60px;
+      background: linear-gradient(135deg, #1a2329 0%, #1e272e 100%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .comments-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #f7b731, transparent);
+    }
+
+    .comments-title {
+      text-align: center;
+      font-family: 'Pacifico', cursive;
+      font-size: 40px;
+      color: #f7b731;
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .comments-title i {
+      margin: 0 15px;
+      animation: starPulse 2s infinite;
+    }
+
+    @keyframes starPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    /* Moving comments container */
+    .comments-marquee {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    }
+
+    .comments-track {
+      position: absolute;
+      display: flex;
+      gap: 30px;
+      animation: scrollComments 40s linear infinite;
+      padding: 20px 0;
+    }
+
+    .comments-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollComments {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Individual comment cards */
+    .comment-card {
+      width: 320px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(247, 183, 49, 0.2);
+      border-radius: 30px;
+      padding: 25px;
+      transition: 0.3s;
+      flex-shrink: 0;
+    }
+
+    .comment-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #f7b731;
+      background: rgba(247, 183, 49, 0.1);
+      box-shadow: 0 20px 40px rgba(247, 183, 49, 0.2);
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .comment-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #f7b731;
+    }
+
+    .comment-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .comment-user h4 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .comment-stars {
+      color: #f7b731;
+      font-size: 14px;
+    }
+
+    .comment-text {
+      color: #ddd;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+
+    .comment-date {
+      color: #888;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    /* Second moving track (opposite direction) */
+    .comments-marquee2 {
+      margin-top: 40px;
+    }
+
+    .comments-track2 {
+      animation: scrollComments2 45s linear infinite;
+    }
+
+    @keyframes scrollComments2 {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Testimonial section */
+    .testimonial-section {
+      max-width: 800px;
+      margin: 100px auto;
+      padding: 0 60px;
+      text-align: center;
+    }
+
+    .testimonial-quote {
+      background: rgba(247, 183, 49, 0.05);
+      border-radius: 50px;
+      padding: 40px;
+      border: 1px solid rgba(247, 183, 49, 0.2);
+    }
+
+    .quote-icon {
+      font-size: 40px;
+      color: #f7b731;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .testimonial-quote p {
+      color: white;
+      font-size: 20px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      color: #f7b731;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    /* Contact section */
+    .contact-section {
+      padding: 100px 60px 60px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-form {
+      background: rgba(255,255,255,0.03);
+      padding: 40px;
+      border-radius: 30px;
+      border: 1px solid rgba(247,183,49,0.1);
+    }
+
+    .contact-form h2 {
+      font-family: 'Pacifico', cursive;
+      color: #f7b731;
+      font-size: 36px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(247,183,49,0.2);
+      border-radius: 15px;
+      color: white;
+    }
+
+    .contact-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .contact-form button {
+      background: #f7b731;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 18px 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      
+      .about-section {
+        flex-direction: column;
+        padding: 120px 20px 60px;
+        gap: 40px;
+      }
+      
+      .gallery-section,
+      .story-container,
+      .team-section,
+      .testimonial-section,
+      .comments-section {
+        padding: 60px 20px;
+      }
+      
+      .about-img img {
+        width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">Trio Vitalité</div>
+
+    <nav>
+      <a href="home.html">HOME</a>
+      <a href="menu.html">MENU</a>
+      <a href="about.html" class="active">ABOUT</a>
+      <a href="home.html#contact">CONTACT</a>
+    </nav>
+
+    <div class="nav-icons">
+      <i class="fa-solid fa-user" id="openRegister"></i>
+      <i class="fa-solid fa-cart-shopping" id="openCart"></i>
+      <button class="order-btn">Order Online</button>
+    </div>
+  </header>
+
+  <!-- MAIN ABOUT SECTION -->
+<section class="about-section">
+  <div class="about-hero">
+    <img src="assets/bg-about2.png" alt="Trio Vitalité Restaurant">
+  </div>
+
+  <div class="about-text">
+    <h2>We Are Trio Vitalité</h2>
+    <p>
+      There are many variations of passages of Lorem Ipsum available, but the majority
+      have suffered alteration in some form, by injected humour. But we're different — 
+      every burger tells our story.
+    </p>
+    <p>
+      We provide the best burgers, pizzas and fries in the city with premium service and fast delivery.
+      Three friends, one dream: to make your taste buds dance.
+    </p>
+    <button class="hero-btn" onclick="location.href='home.html'">Back Home</button>
+  </div>
+</section>
+
+  <!-- PHOTO GALLERY -->
+  
+    <!-- MAIN ABOUT SECTION -->
+<section class="about-section2">
+  <div class="about-hero5">
+    <img src="assets/bg-about5.png" alt="Trio Vitalité Restaurant">
+  </div>
+
+
+</section>
+
+  <!-- STORY TIMELINE -->
+
+
+  <!-- VALUES SECTION -->
+  <div class="values-section">
+    <h2 class="section-title">Why We're Different</h2>
+    <div class="values-grid">
+      <div class="value-item">
+        <i class="fa-solid fa-leaf"></i>
+        <h4>Fresh Always</h4>
+        <p>No freezers. Every ingredient arrives daily from local suppliers.</p>
+      </div>
+      <div class="value-item">
+        <i class="fa-solid fa-clock"></i>
+        <h4>10 Min Promise</h4>
+        <p>Your meal in 10 minutes or your next one's on us. Seriously.</p>
+      </div>
+      <div class="value-item">
+        <i class="fa-solid fa-heart"></i>
+        <h4>Family Vibe</h4>
+        <p>We treat every customer like they're part of the trio.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS SECTION WITH BACKGROUND -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">15K+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Menu Items</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4.9★</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAM SECTION -->
+   <section class="team-section scroll-animate">
+    <h2 class="section-title">Our Team</h2>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <h3>Aalox YT</h3>
+        <p>Creator of the Website</p>
+      </div>
+      <div class="team-card">
+        <h3>Girl Name 2</h3>
+        <p>Idea Contributor</p>
+      </div>
+      <div class="team-card">
+        <h3>Girl Name 3</h3>
+        <p>Idea Contributor</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COOL MOVING COMMENTS SECTION -->
+  <div class="comments-section">
+    <h2 class="comments-title">
+      <i class="fa-solid fa-star"></i> What Our Customers Say <i class="fa-solid fa-star"></i>
+    </h2>
+    
+    <!-- First moving row (left to right) -->
+    <div class="comments-marquee">
+      <div class="comments-track">
+        <!-- Comment 1 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-1.png" alt="Sarah">
+            </div>
+            <div class="comment-user">
+              <h4>Sarah Johnson</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"Best burgers in town! The trio really knows what they're doing. Everything is always fresh and delicious."</p>
+          <div class="comment-date">2 days ago</div>
+        </div>
+        <!-- Comment 2 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-2.png" alt="Mike">
+            </div>
+            <div class="comment-user">
+              <h4>Mike Thompson</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"I've tried everything on the menu and it's all amazing. The fries are perfectly crispy every time!"</p>
+          <div class="comment-date">5 days ago</div>
+        </div>
+        <!-- Comment 3 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-3.png" alt="Emma">
+            </div>
+            <div class="comment-user">
+              <h4>Emma Davis</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"The atmosphere is so welcoming and the food is incredible. My go-to spot for lunch!"</p>
+          <div class="comment-date">1 week ago</div>
+        </div>
+        <!-- Comment 4 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-4.png" alt="Alex">
+            </div>
+            <div class="comment-user">
+              <h4>Alex Rivera</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"Finally a place that gets it right! The quality is consistent and the staff is always smiling."</p>
+          <div class="comment-date">2 weeks ago</div>
+        </div>
+        <!-- Duplicate for seamless loop -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-1.png" alt="Sarah">
+            </div>
+            <div class="comment-user">
+              <h4>Sarah Johnson</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"Best burgers in town! The trio really knows what they're doing. Everything is always fresh and delicious."</p>
+          <div class="comment-date">2 days ago</div>
+        </div>
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-2.png" alt="Mike">
+            </div>
+            <div class="comment-user">
+              <h4>Mike Thompson</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"I've tried everything on the menu and it's all amazing. The fries are perfectly crispy every time!"</p>
+          <div class="comment-date">5 days ago</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second moving row (right to left) -->
+    <div class="comments-marquee comments-marquee2">
+      <div class="comments-track comments-track2">
+        <!-- Comment 5 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-5.png" alt="Lisa">
+            </div>
+            <div class="comment-user">
+              <h4>Lisa Chen</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"The vegetarian options are incredible! Finally a place that takes plant-based seriously."</p>
+          <div class="comment-date">3 days ago</div>
+        </div>
+        <!-- Comment 6 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-6.png" alt="James">
+            </div>
+            <div class="comment-user">
+              <h4>James Wilson</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"Fast delivery and the food arrives hot. The 10-minute promise is real!"</p>
+          <div class="comment-date">4 days ago</div>
+        </div>
+        <!-- Comment 7 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-7.png" alt="Nina">
+            </div>
+            <div class="comment-user">
+              <h4>Nina Patel</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"Best pizza in the city! The crust is perfect and the toppings are always fresh."</p>
+          <div class="comment-date">1 week ago</div>
+        </div>
+        <!-- Comment 8 -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-8.png" alt="David">
+            </div>
+            <div class="comment-user">
+              <h4>David Kim</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"The trio really cares about their customers. You can feel the love in every bite."</p>
+          <div class="comment-date">2 weeks ago</div>
+        </div>
+        <!-- Duplicates -->
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-5.png" alt="Lisa">
+            </div>
+            <div class="comment-user">
+              <h4>Lisa Chen</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"The vegetarian options are incredible! Finally a place that takes plant-based seriously."</p>
+          <div class="comment-date">3 days ago</div>
+        </div>
+        <div class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              <img src="assets/user-6.png" alt="James">
+            </div>
+            <div class="comment-user">
+              <h4>James Wilson</h4>
+              <div class="comment-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="comment-text">"Fast delivery and the food arrives hot. The 10-minute promise is real!"</p>
+          <div class="comment-date">4 days ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <div class="testimonial-section">
+    <div class="testimonial-quote">
+      <div class="quote-icon"><i class="fa-solid fa-quote-right"></i></div>
+      <p>"Best burgers in town, hands down. You can taste the difference when people actually care about what they cook."</p>
+      <div class="testimonial-author">— Sarah, regular customer</div>
+    </div>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  
+  </section>
+
+  <!-- POPUPS -->
+  <div class="popup-overlay" id="cartPopup">
+    <div class="popup-box">
+      <h2>Your Panier </h2>
+
+      <div class="cart-items" id="cartItems"></div>
+
+      <h3>Choose Order Type:</h3>
+      <div class="radio-group">
+        <label><input type="radio" name="type" value="School" required> School</label>
+        <label><input type="radio" name="type" value="Company"> Company</label>
+        <label><input type="radio" name="type" value="Client"> One Client</label>
+      </div>
+
+      <input type="text" id="fullname" placeholder="Full Name" required>
+      <input type="text" id="address" placeholder="Delivery Address" required>
+      <input type="text" id="phone" placeholder="Phone Number" required>
+
+      <h3 class="total-text">Total: $<span id="cartTotal">0</span></h3>
+
+      <button class="checkout-btn" onclick="checkout()">Checkout</button>
+      <button class="close-btn" id="closeCart">Close</button>
+    </div>
+  </div>
+
+  <!-- REGISTER POPUP -->
+  <div class="popup-overlay" id="registerPopup">
+    <div class="popup-box">
+      <h2>Register </h2>
+
+      <input type="text" id="regName" placeholder="Full Name" required>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPass" placeholder="Password" required>
+
+      <button class="checkout-btn" onclick="register()">Register</button>
+      <button class="close-btn" id="closeRegister">Close</button>
+    </div>
+  </div>
+
+  <script>
+
+
+
+let cart = [];
+
+const cartPopup = document.getElementById("cartPopup");
+const registerPopup = document.getElementById("registerPopup");
+
+document.getElementById("openCart").addEventListener("click", () => {
+  cartPopup.style.display = "flex";
+  renderCart();
+});
+
+document.getElementById("closeCart").addEventListener("click", () => {
+  cartPopup.style.display = "none";
+});
+
+document.getElementById("openRegister").addEventListener("click", () => {
+  registerPopup.style.display = "flex";
+});
+
+document.getElementById("closeRegister").addEventListener("click", () => {
+  registerPopup.style.display = "none";
+});
+
+
+
+
+
+    
+    // Load animation
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.classList.add('loaded');
+    });
+
+    // Popup controls
+    document.getElementById('openCart').addEventListener('click', function() {
+      document.getElementById('cartPopup').style.display = 'flex';
+    });
+
+    document.getElementById('openRegister').addEventListener('click', function() {
+      document.getElementById('registerPopup').style.display = 'flex';
+    });
+
+    // Close popups when clicking outside
+    window.addEventListener('click', function(e) {
+      const cartPopup = document.getElementById('cartPopup');
+      const registerPopup = document.getElementById('registerPopup');
+      
+      if (e.target === cartPopup) {
+        cartPopup.style.display = 'none';
+      }
+      if (e.target === registerPopup) {
+        registerPopup.style.display = 'none';
+      }
+    });
+
+    // Contact form submission
+    document.querySelector('.contact-form button').addEventListener('click', function(e) {
+      e.preventDefault();
+      alert('Thanks for reaching out! The trio will reply soon.');
+    });
+
+    // Register button
+    document.querySelector('#registerPopup .checkout-btn').addEventListener('click', function() {
+      alert('Registration demo - welcome to Trio Vitalité!');
+      document.getElementById('registerPopup').style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>

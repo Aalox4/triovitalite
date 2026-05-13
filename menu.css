@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: #fff;
+  padding-top: 90px; /* IMPORTANT because navbar is fixed */
+}
+
+/* NAVBAR (SAME AS HOME) */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 18px 60px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 26px;
+  color: white;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+  color: #f7b731;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-icons i {
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.nav-icons i:hover {
+  color: #f7b731;
+}
+
+.order-btn {
+  background: #f7b731;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.order-btn:hover {
+  background: #ffcc4d;
+}
+
+/* MENU PAGE TITLE */
+.menu-section {
+  padding: 70px 60px;
+  text-align: center;
+}
+
+.section-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 45px;
+  margin-bottom: 50px;
+  color: #222;
+}
+
+/* MENU FILTER TABS */
+.menu-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.menu-tabs .tab {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 20px;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.menu-tabs .tab:hover {
+  background: #f7b731;
+  color: black;
+}
+
+.menu-tabs .tab.active {
+  background: #1e272e;
+  color: white;
+}
+
+/* MENU GRID */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 320px);
+  gap: 25px;
+  justify-content: center;
+}
+
+
+/* MENU CARD */
+.menu-card {
+  width: 320px;
+  background: #1e272e;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: 0.4s;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-card:hover {
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.35);
+}
+
+
+/* IMAGE PART */
+.menu-img {
+  background: #f1f2f6;
+  padding: 25px;
+  border-bottom-left-radius: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-img img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  transition: 0.4s;
+}
+
+
+.menu-card:hover .menu-img img {
+  transform: scale(1.2) rotate(3deg);
+}
+
+/* CARD INFO */
+.menu-info {
+  padding: 22px;
+  color: white;
+  text-align: left;
+}
+
+.menu-info h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.menu-info p {
+  font-size: 13px;
+  opacity: 0.85;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+/* BOTTOM PRICE + CART */
+.menu-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-bottom span {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* CART BUTTON */
+.cart-btn {
+  background: #f7b731;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.cart-btn i {
+  color: white;
+}
+
+.cart-btn:hover {
+  background: #ffcc4d;
+  transform: scale(1.08);
+}
+
+/* FOOTER SPACE */
+.footer-space {
+  height: 60px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 18px 20px;
+  }
+
+  nav a {
+    margin: 0 10px;
+  }
+
+  .menu-section {
+    padding: 60px 20px;
+  }
+
+  .section-title {
+    font-size: 35px;
+  }
+}
+
+@media (max-width: 600px) {
+  nav {
+    display: none; /* optional, if you want mobile menu later */
+  }
+
+  .menu-card {
+    width: 100%;
+    max-width: 350px;
+  }
+}
+
+
+
+/* Initial state (hidden) */
+body {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* When page is loaded → fade in */
+body.loaded {
+  opacity: 1;
+}
+
+/* Fade out before leaving page */
+body.fade-out {
+  opacity: 0;
+}
