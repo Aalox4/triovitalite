@@ -87,7 +87,7 @@
 
 /* INGREDIENT PANEL */
 .ingredients-panel {
-  background: #1e272e;
+  background: #037F8E;
   padding: 35px 30px;
   border-radius: 20px;
   color: white;
@@ -99,7 +99,7 @@
   font-family: 'Pacifico', cursive;
   font-size: 28px;
   margin-bottom: 25px;
-  color: #f7b731;
+  color: #ffe131;
 }
 
 .ingredients-grid {
@@ -125,7 +125,7 @@
 .ingredient-item:hover {
   background: rgba(247, 183, 49, 0.2);
   transform: translateY(-5px);
-  border-color: #f7b731;
+  border-color: #ffe131;
 }
 
 .ingredient-item img {
@@ -148,7 +148,7 @@
 
 .ingredient-item.active {
   background: rgba(247, 183, 49, 0.3);
-  border-color: #f7b731;
+  border-color: #ffe131;
 }
 
 /* CONTROLS */
@@ -161,8 +161,8 @@
 
 .reset-btn {
   background: transparent;
-  border: 2px solid #f7b731;
-  color: #f7b731;
+  border: 2px solid #ffe131;
+  color: #ffe131;
   padding: 12px 25px;
   border-radius: 25px;
   font-weight: 600;
@@ -173,15 +173,15 @@
 }
 
 .reset-btn:hover {
-  background: #f7b731;
-  color: #1e272e;
+  background: #ffe131;
+  color: #037F8E;
   transform: scale(1.05);
 }
 
 .add-to-cart-btn {
-  background: #f7b731;
+  background: #ffe131;
   border: none;
-  color: #1e272e;
+  color: #037F8E;
   padding: 12px 25px;
   border-radius: 25px;
   font-weight: 600;
@@ -215,8 +215,8 @@
 }
 
 .counter-badge {
-  background: #f7b731;
-  color: #1e272e;
+  background: #ffe131;
+  color: #037F8E;
   padding: 5px 12px;
   border-radius: 20px;
   font-weight: 600;

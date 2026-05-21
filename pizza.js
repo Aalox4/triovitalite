@@ -204,7 +204,7 @@ function checkout() {
     return;
   }
   
-  alert(`✅ Order placed successfully!\nTotal: $${cart.reduce((sum, item) => sum + item.price, 0)}\nThanks for choosing Feane!`);
+  alert(`✅ Order placed successfully!\nTotal: $${cart.reduce((sum, item) => sum + item.price, 0)}\nThanks for choosing freshboxe!`);
   cart = [];
   renderCart();
   document.getElementById("cartPopup").style.display = "none";

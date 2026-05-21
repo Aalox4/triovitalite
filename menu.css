@@ -43,7 +43,7 @@ nav a {
 
 nav a:hover,
 nav a.active {
-  color: #f7b731;
+  color: #ffe131;
 }
 
 .nav-icons {
@@ -60,11 +60,11 @@ nav a.active {
 }
 
 .nav-icons i:hover {
-  color: #f7b731;
+  color: #ffe131;
 }
 
 .order-btn {
-  background: #f7b731;
+  background: #ffe131;
   border: none;
   padding: 10px 18px;
   border-radius: 25px;
@@ -111,12 +111,12 @@ nav a.active {
 }
 
 .menu-tabs .tab:hover {
-  background: #f7b731;
+  background: #ffe131;
   color: black;
 }
 
 .menu-tabs .tab.active {
-  background: #1e272e;
+  background: #037F8E;
   color: white;
 }
 
@@ -132,7 +132,7 @@ nav a.active {
 /* MENU CARD */
 .menu-card {
   width: 320px;
-  background: #1e272e;
+  background: #037F8E;
   border-radius: 15px;
   overflow: hidden;
   transition: 0.4s;
@@ -200,7 +200,7 @@ nav a.active {
 
 /* CART BUTTON */
 .cart-btn {
-  background: #f7b731;
+  background: #ffe131;
   border: none;
   width: 42px;
   height: 42px;

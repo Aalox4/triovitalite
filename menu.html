@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feane - Menu</title>
+  <title>freshboxe - Menu</title>
   <link rel="stylesheet" href="menu.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -102,8 +102,8 @@
   margin-top: 15px;
   border: none;
   border-radius: 30px;
-  background: linear-gradient(135deg, #f7b731, #ffcc4d);
-  color: #1e272e;
+  background: linear-gradient(135deg, #ffe131, #ffcc4d);
+  color: #037F8E;
   font-weight: 700;
   cursor: pointer;
   transition: 0.3s;
@@ -191,8 +191,8 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      background: linear-gradient(135deg, #f7b731, #ffcc4d);
-      color: #1e272e;
+      background: linear-gradient(135deg, #ffe131, #ffcc4d);
+      color: #037F8E;
       text-decoration: none;
       padding: 15px 32px;
       border-radius: 50px;
@@ -238,6 +238,77 @@
     .build-meal-btn .btn-text .line2 {
       font-size: 15px; font-weight: 700;
     }
+
+    /* ===== FILTER BUTTONS STYLES (LIGHT YELLOW) ===== */
+    .filter-section {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: -15px 0 40px;
+      padding: 0 20px;
+    }
+
+    .filter-btn {
+      background: #f7b731;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 40px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      color: #037F8E;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .filter-btn:hover {
+      background: #ffcc4d;
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #ffe131, #ffcc4d);
+      color: #025f6b;
+      box-shadow: 0 4px 12px rgba(247,183,49,0.5);
+    }
+
+    /* No results message */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255,255,255,0.8);
+      font-size: 20px;
+      font-weight: 500;
+      background: rgba(0,0,0,0.2);
+      border-radius: 60px;
+      margin: 40px;
+      grid-column: 1 / -1;
+    }
+
+    /* Keep original menu-grid styling */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 900px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 550px) {
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -247,7 +318,7 @@
 
    <!-- NAVBAR -->
   <header class="navbar">
-    <div class="logo">Trio Vitalité</div>
+    <div class="logo">freshbox</div>
 
     <nav>
       <a href="index.html" >HOME</a>
@@ -277,226 +348,861 @@
       </a>
     </div>
 
-    <div class="menu-grid">
+    <!-- FILTER BUTTONS -->
+    <div class="filter-section">
+      <button class="filter-btn active" data-filter="all">🍽️ ALL</button>
+      <button class="filter-btn" data-filter="etudiant-pack">🎓 Étudiant Pack</button>
+      <button class="filter-btn" data-filter="entreprises-pack">🏢 Entreprises Pack</button>
+      <button class="filter-btn" data-filter="desserts">🍰 Desserts</button>
+      <button class="filter-btn" data-filter="drinks">🥤 Drinks</button>
+      <button class="filter-btn" data-filter="healthy-food">🥗 Healthy Food</button>
+      <button class="filter-btn" data-filter="burgers">🍔 Burgers</button>
+      <button class="filter-btn" data-filter="tacos">🌮 Tacos</button>
+      <button class="filter-btn" data-filter="panini">🥪 Panini</button>
+      <button class="filter-btn" data-filter="pizza">🍕 Pizza</button>
+      <button class="filter-btn" data-filter="pasta">🍝 Pasta</button>
+      <button class="filter-btn" data-filter="other">📦 Other</button>
+    </div>
 
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f3.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Double Burger</h3>
-          <p>Best burger with double cheese and sauce.</p>
-          <div class="menu-bottom">
-            <span>$25</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
+    <div class="menu-grid" id="menuGrid">
 
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f4.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Italian Pizza</h3>
-          <p>Fresh pizza with extra mozzarella.</p>
-          <div class="menu-bottom">
-            <span>$22</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
+      <!-- 🍔 BURGERS category -->
+    
 
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f5.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Spaghetti Pasta</h3>
-          <p>Classic pasta with tomato sauce.</p>
-          <div class="menu-bottom">
-            <span>$18</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <!-- DUPLICATE MORE ITEMS FOR LONG MENU -->
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f6.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Chicken Burger</h3>
-          <p>Grilled chicken burger with lettuce.</p>
-          <div class="menu-bottom">
-            <span>$19</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f7.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Cheese Pizza</h3>
-          <p>Super cheesy pizza for cheese lovers.</p>
-          <div class="menu-bottom">
-            <span>$20</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f8.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Carbonara Pasta</h3>
-          <p>Rich creamy carbonara pasta.</p>
-          <div class="menu-bottom">
-            <span>$21</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f6.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Chicken Burger</h3>
-          <p>Grilled chicken burger with lettuce.</p>
-          <div class="menu-bottom">
-            <span>$19</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f7.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Cheese Pizza</h3>
-          <p>Super cheesy pizza for cheese lovers.</p>
-          <div class="menu-bottom">
-            <span>$20</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f8.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Carbonara Pasta</h3>
-          <p>Rich creamy carbonara pasta.</p>
-          <div class="menu-bottom">
-            <span>$21</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f6.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Chicken Burger</h3>
-          <p>Grilled chicken burger with lettuce.</p>
-          <div class="menu-bottom">
-            <span>$19</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f7.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Cheese Pizza</h3>
-          <p>Super cheesy pizza for cheese lovers.</p>
-          <div class="menu-bottom">
-            <span>$20</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f8.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Carbonara Pasta</h3>
-          <p>Rich creamy carbonara pasta.</p>
-          <div class="menu-bottom">
-            <span>$21</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f6.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Chicken Burger</h3>
-          <p>Grilled chicken burger with lettuce.</p>
-          <div class="menu-bottom">
-            <span>$19</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f7.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Cheese Pizza</h3>
-          <p>Super cheesy pizza for cheese lovers.</p>
-          <div class="menu-bottom">
-            <span>$20</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card">
-        <div class="menu-img">
-          <img src="assets/f8.png" alt="">
-        </div>
-        <div class="menu-info">
-          <h3>Carbonara Pasta</h3>
-          <p>Rich creamy carbonara pasta.</p>
-          <div class="menu-bottom">
-            <span>$21</span>
-            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
-          </div>
-        </div>
-      </div>
-
+      <!-- 🍕 PIZZA category -->
+   
 
       
+      <!-- 🍔 BURGERS category (Chicken) -->
+      
+
+      <!-- 🍝 PASTA category (Carbonara) -->
+      <div class="menu-card" data-category="pasta">
+        <div class="menu-img">
+          <img src="assets/f23.png" alt="" >
+        </div>
+        <div class="menu-info">
+          <h3>Carbonara Pasta</h3>
+          <p>Rich creamy carbonara pasta.</p>
+          <div class="menu-bottom">
+            <span>21 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🍰 DESSERTS category -->
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="assets/f66.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Cheesecake</h3>
+          <p>Grilled chicken burger with lettuce.</p>
+          <div class="menu-bottom">
+            <span>25 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🍰 DESSERTS category (Brownie) -->
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="assets/f77.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Brownie</h3>
+          <p>Super cheesy pizza for cheese lovers.</p>
+          <div class="menu-bottom">
+            <span>20 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🍰 DESSERTS category (Cookies) -->
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="assets/ff88.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Cookies</h3>
+          <p>Rich creamy carbonara pasta.</p>
+          <div class="menu-bottom">
+            <span>15 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- 🥤 DRINKS category (Mojito) -->
+ 
+
+      <!-- 🥗 HEALTHY FOOD category -->
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="assets/f55.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Greek Salad</h3>
+          <p>Fresh feta cheese, olives and veggies.</p>
+          <div class="menu-bottom">
+            <span>28 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🎓 ÉTUDIANT PACK category -->
+      <div class="menu-card" data-category="etudiant-pack">
+        <div class="menu-img">
+          <img src="assets/f33.png" alt="" width="150" height="150" style="object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Student Meal</h3>
+          <p>Burger + Fries + Drink for students.</p>
+          <div class="menu-bottom">
+            <span>35 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🏢 ENTREPRISES PACK category -->
+      <div class="menu-card" data-category="entreprises-pack">
+        <div class="menu-img">
+          <img src="assets/f44.png" alt="" >
+        </div>
+        <div class="menu-info">
+          <h3>Business Lunch</h3>
+          <p>Complete meal for professionals.</p>
+          <div class="menu-bottom">
+            <span>55 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🌮 TACOS category -->
+   
+
+      <!-- 🥪 PANINI category -->
+   
+
+      <!-- 📦 OTHER category -->
+      <div class="menu-card" data-category="other">
+        <div class="menu-img">
+          <img src="assets/f88.png" alt="">
+        </div>
+        <div class="menu-info">
+          <h3>Onion Rings</h3>
+          <p>Crispy onion rings with dip.</p>
+          <div class="menu-bottom">
+            <span>14 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW BURGERS ===== -->
+      <div class="menu-card" data-category="burgers">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=300&h=300&fit=crop&q=80" alt="BBQ Bacon Burger" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>BBQ Bacon Burger</h3>
+          <p>Smoky BBQ sauce, crispy bacon strips and melted cheddar cheese.</p>
+          <div class="menu-bottom">
+            <span>42 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burgers">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=300&h=300&fit=crop&q=80" alt="Veggie Burger" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Veggie Burger</h3>
+          <p>Plant-based patty with fresh lettuce, tomato and our signature sauce.</p>
+          <div class="menu-bottom">
+            <span>36 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burgers">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=300&h=300&fit=crop&q=80" alt="Smash Burger" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Smash Burger</h3>
+          <p>Thin crispy smashed patty, caramelized onions and American cheese.</p>
+          <div class="menu-bottom">
+            <span>38 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burgers">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=300&h=300&fit=crop&q=80" alt="Mushroom Swiss Burger" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Mushroom Swiss Burger</h3>
+          <p>Portobello mushroom, melted Swiss cheese, garlic aioli on brioche.</p>
+          <div class="menu-bottom">
+            <span>44 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW PIZZA ===== -->
+      <div class="menu-card" data-category="pizza">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=300&h=300&fit=crop&q=80" alt="Pepperoni Pizza" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Pepperoni Classic</h3>
+          <p>Generous pepperoni, rich tomato base and stretchy mozzarella.</p>
+          <div class="menu-bottom">
+            <span>55 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pizza">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=300&fit=crop&q=80" alt="BBQ Chicken Pizza" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>BBQ Chicken Pizza</h3>
+          <p>BBQ sauce base, grilled chicken strips, red onions and coriander.</p>
+          <div class="menu-bottom">
+            <span>58 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pizza">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300&h=300&fit=crop&q=80" alt="Veggie Supreme Pizza" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Veggie Supreme</h3>
+          <p>Bell peppers, mushrooms, black olives, artichoke and sun-dried tomatoes.</p>
+          <div class="menu-bottom">
+            <span>50 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pizza">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=300&fit=crop&q=80" alt="Margherita Pizza" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Classic Margherita</h3>
+          <p>Fresh basil, buffalo mozzarella and San Marzano tomatoes.</p>
+          <div class="menu-bottom">
+            <span>48 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW PASTA ===== -->
+      <div class="menu-card" data-category="pasta">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=300&h=300&fit=crop&q=80" alt="Penne Arrabbiata" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Penne Arrabbiata</h3>
+          <p>Spicy tomato sauce with fresh basil, chilli flakes and garlic.</p>
+          <div class="menu-bottom">
+            <span>38 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pasta">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=300&h=300&fit=crop&q=80" alt="Lasagna" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Meat Lasagna</h3>
+          <p>Layers of rich Bolognese, creamy béchamel and fresh pasta sheets.</p>
+          <div class="menu-bottom">
+            <span>45 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pasta">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=300&h=300&fit=crop&q=80" alt="Fettuccine Alfredo" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Fettuccine Alfredo</h3>
+          <p>Silky parmesan cream sauce, fresh fettuccine and cracked black pepper.</p>
+          <div class="menu-bottom">
+            <span>42 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="pasta">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1540189549336-e6e99ef4597b?w=300&h=300&fit=crop&q=80" alt="Pesto Pasta" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Pesto Genovese</h3>
+          <p>Homemade basil pesto, toasted pine nuts and cherry tomatoes.</p>
+          <div class="menu-bottom">
+            <span>40 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW DESSERTS ===== -->
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=300&h=300&fit=crop&q=80" alt="Tiramisu" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Tiramisu</h3>
+          <p>Classic Italian dessert with espresso-soaked ladyfingers and mascarpone cream.</p>
+          <div class="menu-bottom">
+            <span>35 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=300&h=300&fit=crop&q=80" alt="Chocolate Lava Cake" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Chocolate Lava Cake</h3>
+          <p>Warm molten dark chocolate center served with vanilla ice cream.</p>
+          <div class="menu-bottom">
+            <span>32 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1558326567-98ae2405596b?w=300&h=300&fit=crop&q=80" alt="Macarons" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>French Macarons</h3>
+          <p>Assorted flavors with light crispy shells and creamy ganache filling.</p>
+          <div class="menu-bottom">
+            <span>28 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=300&h=300&fit=crop&q=80" alt="Creme Brulee" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Crème Brûlée</h3>
+          <p>Classic French vanilla custard with a perfectly caramelized sugar crust.</p>
+          <div class="menu-bottom">
+            <span>30 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="desserts">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=300&h=300&fit=crop&q=80" alt="Strawberry Cheesecake" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Strawberry Tart</h3>
+          <p>Fresh strawberries on silky pastry cream with a buttery shortcrust base.</p>
+          <div class="menu-bottom">
+            <span>33 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW DRINKS ===== -->
+      <div class="menu-card" data-category="drinks">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=300&h=300&fit=crop&q=80" alt="Fresh Orange Juice" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Fresh Orange Juice</h3>
+          <p>100% freshly squeezed oranges, no added sugar, served chilled.</p>
+          <div class="menu-bottom">
+            <span>18 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="drinks">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1603569283847-aa295f0d016a?w=300&h=300&fit=crop&q=80" alt="Sparkling Lemonade" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Sparkling Lemonade</h3>
+          <p>Homemade lemonade with fresh mint, sparkling water and honey syrup.</p>
+          <div class="menu-bottom">
+            <span>20 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="drinks">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1546173159-315724a31696?w=300&h=300&fit=crop&q=80" alt="Mango Smoothie" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Mango Smoothie</h3>
+          <p>Tropical Alphonso mango blended with coconut milk and a drizzle of honey.</p>
+          <div class="menu-bottom">
+            <span>25 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="drinks">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=300&h=300&fit=crop&q=80" alt="Iced Caramel Latte" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Iced Caramel Latte</h3>
+          <p>Double espresso, whole milk, caramel syrup over crushed ice.</p>
+          <div class="menu-bottom">
+            <span>28 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="drinks">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=300&h=300&fit=crop&q=80" alt="Strawberry Milkshake" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Strawberry Milkshake</h3>
+          <p>Thick creamy shake with fresh strawberries and whipped cream on top.</p>
+          <div class="menu-bottom">
+            <span>30 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="drinks">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300&h=300&fit=crop&q=80" alt="Matcha Latte" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Matcha Latte</h3>
+          <p>Premium ceremonial matcha whisked with steamed oat milk.</p>
+          <div class="menu-bottom">
+            <span>26 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW HEALTHY FOOD ===== -->
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=300&fit=crop&q=80" alt="Quinoa Bowl" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Quinoa Power Bowl</h3>
+          <p>Tri-color quinoa, roasted veggies, avocado and tahini dressing.</p>
+          <div class="menu-bottom">
+            <span>42 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=300&h=300&fit=crop&q=80" alt="Avocado Toast" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Avocado Toast</h3>
+          <p>Sourdough toast with smashed avocado, poached egg and chilli flakes.</p>
+          <div class="menu-bottom">
+            <span>35 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=300&fit=crop&q=80" alt="Buddha Bowl" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Buddha Bowl</h3>
+          <p>Mixed grains, edamame, pickled ginger, cucumber and sesame dressing.</p>
+          <div class="menu-bottom">
+            <span>45 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?w=300&h=300&fit=crop&q=80" alt="Acai Bowl" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Açaí Smoothie Bowl</h3>
+          <p>Frozen açaí base topped with granola, banana, fresh berries and honey.</p>
+          <div class="menu-bottom">
+            <span>40 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?w=300&h=300&fit=crop&q=80" alt="Caesar Salad" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Caesar Salad</h3>
+          <p>Crisp romaine, parmesan shavings, house croutons and Caesar dressing.</p>
+          <div class="menu-bottom">
+            <span>32 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="healthy-food">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=300&fit=crop&q=80" alt="Detox Salad" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Detox Green Salad</h3>
+          <p>Kale, spinach, cucumber, green apple and lemon-ginger vinaigrette.</p>
+          <div class="menu-bottom">
+            <span>30 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW TACOS ===== -->
+      <div class="menu-card" data-category="tacos">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=300&h=300&fit=crop&q=80" alt="Chicken Tacos" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Chicken Tacos</h3>
+          <p>Seasoned grilled chicken, pico de gallo, sour cream and fresh coriander.</p>
+          <div class="menu-bottom">
+            <span>30 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="tacos">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?w=300&h=300&fit=crop&q=80" alt="Veggie Tacos" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Veggie Tacos</h3>
+          <p>Roasted corn, black beans, avocado, pickled red cabbage and salsa verde.</p>
+          <div class="menu-bottom">
+            <span>28 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="tacos">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?w=300&h=300&fit=crop&q=80" alt="Fish Tacos" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Crispy Fish Tacos</h3>
+          <p>Beer-battered fish fillet, cabbage slaw and chipotle mayo in corn tortillas.</p>
+          <div class="menu-bottom">
+            <span>34 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="tacos">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=300&h=300&fit=crop&q=80" alt="Al Pastor Tacos" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Al Pastor Tacos</h3>
+          <p>Marinated achiote pork, pineapple chunks, white onion and cilantro.</p>
+          <div class="menu-bottom">
+            <span>36 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW PANINI ===== -->
+      <div class="menu-card" data-category="panini">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1554433607-66b5bbe20e0f?w=300&h=300&fit=crop&q=80" alt="Tuna Melt Panini" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Tuna Melt Panini</h3>
+          <p>Tuna, capers, melted cheddar, red onion on toasted ciabatta bread.</p>
+          <div class="menu-bottom">
+            <span>30 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="panini">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=300&h=300&fit=crop&q=80" alt="Caprese Panini" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Caprese Panini</h3>
+          <p>Fresh mozzarella, ripe tomatoes, basil and balsamic reduction.</p>
+          <div class="menu-bottom">
+            <span>28 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="panini">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1485451456034-3f9391c6f769?w=300&h=300&fit=crop&q=80" alt="Turkey Avocado Panini" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Turkey & Avocado</h3>
+          <p>Smoked turkey, creamy avocado, sundried tomato pesto and rocket.</p>
+          <div class="menu-bottom">
+            <span>32 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="panini">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1481070414801-51fd0d2f1e06?w=300&h=300&fit=crop&q=80" alt="Prosciutto Brie Panini" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Prosciutto & Brie</h3>
+          <p>Italian prosciutto, creamy brie cheese, wild rocket and fig jam.</p>
+          <div class="menu-bottom">
+            <span>38 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW ÉTUDIANT PACK ===== -->
+      <div class="menu-card" data-category="etudiant-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=300&h=300&fit=crop&q=80" alt="Mini Burger Pack" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Mini Burger Pack</h3>
+          <p>Slider burger + small crispy fries + can of your choice.</p>
+          <div class="menu-bottom">
+            <span>32 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="etudiant-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1516100882582-96c3a05fe590?w=300&h=300&fit=crop&q=80" alt="Pasta Box" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Pasta Box</h3>
+          <p>Pasta of the day + garlic bread + soft drink included.</p>
+          <div class="menu-bottom">
+            <span>30 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="etudiant-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1562059390-a761a084768e?w=300&h=300&fit=crop&q=80" alt="Wrap + Juice" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Wrap + Fresh Juice</h3>
+          <p>Grilled chicken wrap + freshly squeezed juice + homemade cookie.</p>
+          <div class="menu-bottom">
+            <span>33 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="etudiant-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=300&h=300&fit=crop&q=80" alt="Pizza Slice Pack" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Pizza Slice Pack</h3>
+          <p>2 generous pizza slices + side salad + soft drink.</p>
+          <div class="menu-bottom">
+            <span>28 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW ENTREPRISES PACK ===== -->
+      <div class="menu-card" data-category="entreprises-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=300&h=300&fit=crop&q=80" alt="Team Lunch Box" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Team Lunch Box</h3>
+          <p>Assorted dishes for groups — includes entrée, main, drink and dessert per person.</p>
+          <div class="menu-bottom">
+            <span>75 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="entreprises-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=300&fit=crop&q=80" alt="Premium Bento Box" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Premium Bento Box</h3>
+          <p>Balanced bento with protein, salad, soup and seasonal side dish.</p>
+          <div class="menu-bottom">
+            <span>65 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="entreprises-pack">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=300&h=300&fit=crop&q=80" alt="VIP Executive Plate" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>VIP Executive Plate</h3>
+          <p>Chef's curated selection with premium ingredients and full table service.</p>
+          <div class="menu-bottom">
+            <span>95 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEW OTHER ===== -->
+      <div class="menu-card" data-category="other">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=300&h=300&fit=crop&q=80" alt="French Fries" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Crispy French Fries</h3>
+          <p>Double-fried golden fries seasoned with sea salt, served with ketchup.</p>
+          <div class="menu-bottom">
+            <span>16 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="other">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=300&h=300&fit=crop&q=80" alt="Mozzarella Sticks" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Mozzarella Sticks</h3>
+          <p>Crispy breaded mozzarella sticks served with warm marinara dipping sauce.</p>
+          <div class="menu-bottom">
+            <span>22 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="other">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=300&h=300&fit=crop&q=80" alt="Chicken Wings" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Chicken Wings</h3>
+          <p>Crispy wings tossed in BBQ or buffalo sauce, served with blue cheese dip.</p>
+          <div class="menu-bottom">
+            <span>38 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="other">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=300&h=300&fit=crop&q=80" alt="Nachos" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Loaded Nachos</h3>
+          <p>Tortilla chips with melted cheese, jalapeños, guacamole and sour cream.</p>
+          <div class="menu-bottom">
+            <span>35 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="other">
+        <div class="menu-img">
+          <img src="https://images.unsplash.com/photo-1598679253544-2c97992403ea?w=300&h=300&fit=crop&q=80" alt="Sweet Potato Fries" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div class="menu-info">
+          <h3>Sweet Potato Fries</h3>
+          <p>Seasoned sweet potato fries with a smoky chipotle dipping sauce.</p>
+          <div class="menu-bottom">
+            <span>20 MAD</span>
+            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+          </div>
+        </div>
+      </div>
 
     </div>
 
@@ -544,17 +1250,6 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
   </section>
 
   <script src="menu.js"></script>
@@ -578,12 +1273,53 @@
       container.appendChild(b);
     }
 
+    // FILTER FUNCTIONALITY
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const menuGrid = document.getElementById('menuGrid');
+    const allProductCards = Array.from(document.querySelectorAll('.menu-card'));
 
+    function filterProductsByCategory(category) {
+      let visibleCount = 0;
+      
+      allProductCards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        
+        if (category === 'all' || cardCat === category) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
 
+      // Remove existing no-results message
+      const existingMsg = document.querySelector('.no-results');
+      if (existingMsg) existingMsg.remove();
 
+      // Show message if no products found
+      if (visibleCount === 0) {
+        const noMsg = document.createElement('div');
+        noMsg.className = 'no-results';
+        noMsg.innerHTML = '😢 No products found in this category.';
+        menuGrid.appendChild(noMsg);
+      }
+    }
 
+    // Add click event to all filter buttons
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+        
+        const filterValue = btn.getAttribute('data-filter');
+        filterProductsByCategory(filterValue);
+      });
+    });
 
-
+    // Show all products by default
+    filterProductsByCategory('all');
 
     const cartBtn = document.getElementById("openCart");
 const registerBtn = document.getElementById("openRegister");
